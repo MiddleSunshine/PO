@@ -1,0 +1,33 @@
+.symbol-keyboard{
+
+}
+.symbol-keyboard table tr td{
+    border: 1px solid;
+    background-color: #999999;
+    color: white;
+}
+.symbol-keyboard td{
+    text-align: left;
+    padding: 5px;
+}
+.symbol-keyboard .symbol{
+    font-weight: bold;
+}
+.symbol-keyboard td > span{
+    font-size: 20px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.symbol-keyboard td > span:hover{
+    color: #3c3c3c;
+}
+
+.symbol-keyboard div > span{
+    padding: 2px;
+    cursor: pointer;
+}
+
+.symbol-keyboard div > span:hover{
+    background-color: #8c8c8c;
+}

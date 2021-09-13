@@ -1,0 +1,24 @@
+.WordCheckCard{
+
+}
+.WordCheckCard .WordCheckCardBody{
+    text-align: center;
+}
+.WordCheckCard .ant-row{
+    text-align: center;
+}
+.WordCheckCard span{
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.WordCheckCard .success{
+    background-color: #F6FFED;
+}
+
+.WordCheckCard .fail{
+    background-color: #FFF2F0;
+}
+.WordCheckCard .info{
+    background-color: #E6F7FF;
+}
