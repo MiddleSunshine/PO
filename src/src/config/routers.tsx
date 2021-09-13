@@ -1,4 +1,5 @@
 import Index from '../page/index'
+import Collector from "../page/Collector";
 
 interface router {
     path: string,
@@ -7,6 +8,10 @@ interface router {
 }
 
 const routers: Array<router> = [
+    {
+        path:"/points/:pid",
+        component:Collector
+    },
     {
         path: "/",
         component: Index
