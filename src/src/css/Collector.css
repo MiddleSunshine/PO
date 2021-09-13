@@ -1,0 +1,24 @@
+.Collector{
+    width: 33%;
+}
+.Collector input{
+    border: 1px solid #F0F0F0;
+}
+.Collector textarea{
+    border: 1px solid #F0F0F0;
+}
+.Collector .ant-card-body{
+    padding: 0px !important;
+}
+.Collector .ant-card-head{
+    padding: 0px !important;
+}
+.Collector .ant-card-head-title{
+    padding: 0px !important;
+}
+.Collector .ant-card-head-title input{
+    height: 47px;
+}
+.Collector .ant-select{
+    width: 100% !important;
+}
