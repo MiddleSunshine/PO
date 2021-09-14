@@ -43,6 +43,34 @@ class Points extends Base{
         return self::returnActionResult($returnData);
     }
 
+    public function Save(){
+        $postData=json_decode($this->post,1);
+        if (empty($postData['keyword'])){
+            return self::returnActionResult([],false,"keyword不能为空");
+        }
+        if (!isset($postData['PID'])){
+            return self::returnActionResult([],false,"PID Error");
+        }
+        $pid=$postData['PID'];
+        if (!empty($postData['ID'])){
+            // update
+            $postData['LastUpdateTime']=date("Y-m-d H:i:s");
+            $this->handleSql($postData,$postData['ID'],'keyword');
+        }else{
+            // insert
+            $postData['AddTime']=date("Y-m-d H:i:s");
+            $postData['LastUpdateTime']=date("Y-m-d H:i:s");
+            $this->handleSql($postData,0,'keyword');
+        }
+        $sql=sprintf("select ID from %s where keyword='%s'",static::$table,$postData['keyword']);
+        $point=$this->pdo->getFirstRow($sql);
+        $pointsConnection=new PointsConnection();
+        $pointsConnection->updatePointsConnection($pid,$point['ID']);
+        return self::returnActionResult([
+            'ID'=>$point['ID']
+        ]);
+    }
+
     public function GetAPoint(){
         $id=$this->get['id'] ?? 0;
         if (!$id){

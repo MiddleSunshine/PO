@@ -1,6 +1,6 @@
 import React from 'react'
 import Point from "../component/point";
-import {Card,Select,Row,Col,Button} from "antd";
+import {Card,Select,Row,Col,Button,message} from "antd";
 import "./../css/Collector.css"
 import {SaveOutlined,PlusCircleOutlined,DeleteOutlined,UnorderedListOutlined,FileMarkdownOutlined} from '@ant-design/icons';
 import config from "../config/setting";
@@ -104,7 +104,37 @@ class Collector extends React.Component{
         }
     }
     savePoint(index){
-
+        let point=this.state.points[index];
+        if (point.status==='init'){
+            point.status='new';
+        }
+        fetch(
+            config.back_domain+"/index.php?action=Points&method=Save",
+            {
+                method:"post",
+                mode:"cors",
+                body:JSON.stringify({
+                    ID:point.ID,
+                    keyword:point.keyword,
+                    status:point.status,
+                    PID:this.state.id
+                })
+            }
+        )
+            .then((res)=>{
+                res.json().then((json)=>{
+                    if (!json.Status){
+                        message.error(json.Message);
+                    }else{
+                        point.ID=json.Data.ID;
+                        let points=this.state.points;
+                        points[index]=point;
+                        this.setState({
+                            points:points
+                        })
+                    }
+                })
+            })
     }
     deletePoint(index,force=false){
         let point=this.state.points[index];
@@ -119,8 +149,13 @@ class Collector extends React.Component{
             });
         }
     }
-    openNewPage(){
-
+    openNewPage(index){
+        let point=this.state.points[index];
+        if(!point.ID){
+            this.savePoint(index);
+            point=this.state.points[index];
+        }
+        window.open(config.front_domain+"/points/"+point.ID);
     }
     showMoreFile(){
 
@@ -187,7 +222,9 @@ class Collector extends React.Component{
                                     />
                                 </Card.Grid>
                                 <Card.Grid className={"icons"}>
-                                    <SaveOutlined />
+                                    <SaveOutlined
+                                        onClick={()=>this.savePoint(outsideIndex)}
+                                    />
                                 </Card.Grid>
                                 <Card.Grid>
                                     <Select
