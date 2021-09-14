@@ -1,6 +1,7 @@
 .Collector{
     width: 33%;
     float: left;
+    border: 3px solid white !important;
 }
 .Collector input{
     border: 1px solid #F0F0F0;

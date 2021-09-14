@@ -12,17 +12,6 @@ class Collector extends React.Component{
         super(props);
         this.state={
             id:0,
-            initPoints:{
-                id:0,
-                pid:0,
-                keyword:'',
-                status:'init',
-                children:[]
-            },
-            initSubPoints:{
-                id:0,
-                pid:0
-            },
             points:[
                 {
                     id:0,
@@ -42,16 +31,25 @@ class Collector extends React.Component{
         this.newPoint=this.newPoint.bind(this);
     }
     newSubPoint(pid,index){
-        let newPoint=this.state.initSubPoints;
-        newPoint.pid=pid;
         let points=this.state.points;
-        points[index].children.push(newPoint);
+        let newSubPoint={
+            id:0,
+            pid:0,
+            status:'init'
+        };
+        points[index].children.push(newSubPoint);
         this.setState({
             points:points
         });
     }
     newPoint(){
-        let newPoint=this.state.initPoints;
+        var newPoint={
+            id:0,
+            pid:0,
+            keyword:'',
+            status:'init',
+            children:[]
+        };
         newPoint.pid=this.state.id;
         let points=this.state.points;
         points.push(newPoint);
