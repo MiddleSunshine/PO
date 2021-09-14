@@ -3,6 +3,7 @@ import Point from "../component/point";
 import {Card,Select,Row,Col,Button} from "antd";
 import "./../css/Collector.css"
 import {SaveOutlined,PlusCircleOutlined,DeleteOutlined,UnorderedListOutlined} from '@ant-design/icons';
+import config from "../config/setting";
 
 const { Option } = Select;
 
@@ -11,6 +12,17 @@ class Collector extends React.Component{
         super(props);
         this.state={
             id:0,
+            initPoints:{
+                id:0,
+                pid:0,
+                keyword:'',
+                status:'init',
+                children:[]
+            },
+            initSubPoints:{
+                id:0,
+                pid:0
+            },
             points:[
                 {
                     id:0,
@@ -23,19 +35,29 @@ class Collector extends React.Component{
                     ]
                 }
             ],
-            statusBackGroupColor:{
-                new:"#EAEDF2",
-                solved:"#F6FFED",
-                give_up:"#FFFBE6",
-                archived:"#E6F7FF"
-            },
-            statusMap:[
-                {value:"new",label:"New"},
-                {value:"solved",label:"Solved"},
-                {value:"give_up",label:"Give Up"},
-                {value:"archived",label:"Archived"}
-            ]
+            statusBackGroupColor:config.statusBackGroupColor,
+            statusMap:config.statusMap
         }
+        this.newSubPoint=this.newSubPoint.bind(this);
+        this.newPoint=this.newPoint.bind(this);
+    }
+    newSubPoint(pid,index){
+        let newPoint=this.state.initSubPoints;
+        newPoint.pid=pid;
+        let points=this.state.points;
+        points[index].children.push(newPoint);
+        this.setState({
+            points:points
+        });
+    }
+    newPoint(){
+        let newPoint=this.state.initPoints;
+        newPoint.pid=this.state.id;
+        let points=this.state.points;
+        points.push(newPoint);
+        this.setState({
+            points:points
+        })
     }
     render() {
         return(
@@ -47,6 +69,7 @@ class Collector extends React.Component{
                         <Button
                             icon={<PlusCircleOutlined/>}
                             type={"primary"}
+                            onClick={()=>this.newPoint()}
                         >
                             New Point
                         </Button>
@@ -85,6 +108,7 @@ class Collector extends React.Component{
                             <Card
                                 className={"actions"}
                                 style={{backgroundColor:backgroundColor}}
+                                onClick={()=>this.newSubPoint(Item.id,outsideIndex)}
                             >
                                 <Card.Grid className={"icons"}>
                                     <PlusCircleOutlined/>

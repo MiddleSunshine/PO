@@ -1,5 +1,6 @@
 .Collector{
     width: 33%;
+    float: left;
 }
 .Collector input{
     border: 1px solid #F0F0F0;
@@ -39,7 +40,9 @@
 .Collector .archived .ant-select-selector{
     background-color: #E6F7FF;
 }
-
+.Collector .init .ant-select-selector{
+    background-color: #FF4D4F !important;
+}
 .Collector .actions .ant-card-grid{
     padding: 0px;
     height: 32px;

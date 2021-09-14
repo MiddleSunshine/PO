@@ -1,13 +1,15 @@
 import React from 'react'
 import {Card,Row,Col} from "antd";
 import {SaveOutlined,RightOutlined,DeleteOutlined } from '@ant-design/icons';
+import config from "../config/setting";
 class Point extends React.Component{
     constructor(props) {
         super(props);
         this.state={
             pid:props.pid,
             id:props.id,
-            hidden:false
+            hidden:false,
+            status:'init'
         }
         this.deleteThis=this.deleteThis.bind(this);
         this.hiddenThis=this.hiddenThis.bind(this);
@@ -29,7 +31,7 @@ class Point extends React.Component{
             return null;
         }
         return(
-            <Card className={"subPoint"}>
+            <Card className={"subPoint"} style={{backgroundColor:config.statusBackGroupColor[this.state.status]}}>
                 <Row justify="space-around" align="middle">
                     <Col span={18}>
                         <input
