@@ -1,7 +1,7 @@
 <?php
 
 class PointsConnection extends Base{
-    public static $table="points_connection";
+    public static $table="Points_Connection";
     public function getSubParentId($pid){
         $sql=sprintf("select SubPID from %s where PID=%d",static::$table,$pid);
         $dataBaseData=$this->pdo->getRows($sql);

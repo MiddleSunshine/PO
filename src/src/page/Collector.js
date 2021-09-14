@@ -216,15 +216,17 @@ class Collector extends React.Component{
                                 className={"actions"}
                                 style={{backgroundColor:backgroundColor}}
                             >
-                                <Card.Grid className={"icons"}>
-                                    <PlusCircleOutlined
-                                        onClick={()=>this.newSubPoint(Item.ID,outsideIndex)}
-                                    />
+                                <Card.Grid
+                                    className={"icons"}
+                                    onClick={()=>this.newSubPoint(Item.ID,outsideIndex)}
+                                >
+                                    <PlusCircleOutlined/>
                                 </Card.Grid>
-                                <Card.Grid className={"icons"}>
-                                    <SaveOutlined
-                                        onClick={()=>this.savePoint(outsideIndex)}
-                                    />
+                                <Card.Grid
+                                    className={"icons"}
+                                    onClick={()=>this.savePoint(outsideIndex)}
+                                >
+                                    <SaveOutlined/>
                                 </Card.Grid>
                                 <Card.Grid>
                                     <Select
@@ -239,10 +241,11 @@ class Collector extends React.Component{
                                         })}
                                     </Select>
                                 </Card.Grid>
-                                <Card.Grid className={"icons"}>
-                                    <DeleteOutlined
-                                        onClick={()=>this.deletePoint(outsideIndex)}
-                                    />
+                                <Card.Grid
+                                    className={"icons"}
+                                    onClick={()=>this.deletePoint(outsideIndex)}
+                                >
+                                    <DeleteOutlined/>
                                 </Card.Grid>
                                 <Card.Grid className={"icons"}>
                                     <UnorderedListOutlined />

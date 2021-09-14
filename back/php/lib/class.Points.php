@@ -52,11 +52,13 @@ class Points extends Base{
             return self::returnActionResult([],false,"PID Error");
         }
         $pid=$postData['PID'];
+        unset($postData['PID']);
         if (!empty($postData['ID'])){
             // update
             $postData['LastUpdateTime']=date("Y-m-d H:i:s");
             $this->handleSql($postData,$postData['ID'],'keyword');
         }else{
+            unset($postData['ID']);
             // insert
             $postData['AddTime']=date("Y-m-d H:i:s");
             $postData['LastUpdateTime']=date("Y-m-d H:i:s");
