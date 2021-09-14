@@ -6,3 +6,5 @@ src/package-lock.json
 back/data/mysql/
 
 back/nginx/log/
+
+back/php/.idea/
