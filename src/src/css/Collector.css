@@ -6,6 +6,7 @@
 }
 .Collector textarea{
     border: 1px solid #F0F0F0;
+    width: 100%;
 }
 .Collector .ant-card-body{
     padding: 0px !important;
@@ -21,4 +22,41 @@
 }
 .Collector .ant-select{
     width: 100% !important;
+}
+
+.Collector .new{
+    background-color: #EAEDF2;
+}
+
+.Collector .solved .ant-select-selector{
+    background-color: #F6FFED !important;
+}
+
+.Collector .give_up .ant-select-selector{
+    background-color: #FFFBE6;
+}
+
+.Collector .archived .ant-select-selector{
+    background-color: #E6F7FF;
+}
+
+.Collector .actions .ant-card-grid{
+    padding: 0px;
+    height: 32px;
+    text-align: center;
+}
+
+.Collector .actions .icons{
+    padding-top: 5px;
+    cursor: pointer;
+}
+
+.Collector .subPoint{
+
+}
+.Collector .subPoint .icons{
+    cursor: pointer;
+}
+.Collector .subPoint .icons:hover{
+    color: #52C41A;
 }

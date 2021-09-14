@@ -1,38 +1,10 @@
 import React from 'react'
 import Point from "../component/point";
-import {Card,Select,Row,Col} from "antd";
+import {Card,Select,Row,Col,Button} from "antd";
 import "./../css/Collector.css"
-import {SaveOutlined,PlusCircleOutlined} from '@ant-design/icons';
+import {SaveOutlined,PlusCircleOutlined,DeleteOutlined,UnorderedListOutlined} from '@ant-design/icons';
 
 const { Option } = Select;
-
-class StatusChange extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state={
-            pid:props.id,
-            status:props.status,
-            statusMap:[
-                'new',
-                'solved',
-                'give up'
-            ]
-        }
-    }
-    render() {
-        return(
-            <Select>
-                {
-                    this.state.statusMap.map((Item)=>{
-                        return(
-                            <Option key={Item} value={Item}>{Item}</Option>
-                        )
-                    })
-                }
-            </Select>
-        )
-    }
-}
 
 class Collector extends React.Component{
     constructor(props) {
@@ -42,51 +14,100 @@ class Collector extends React.Component{
             points:[
                 {
                     id:0,
-                    keyword:'',
-                    status:'new',
+                    keyword:'输入内容',
+                    status:'solved',
                     children:[
                         {
-                            id:1
+                            id:0
                         }
                     ]
                 }
+            ],
+            statusBackGroupColor:{
+                new:"#EAEDF2",
+                solved:"#F6FFED",
+                give_up:"#FFFBE6",
+                archived:"#E6F7FF"
+            },
+            statusMap:[
+                {value:"new",label:"New"},
+                {value:"solved",label:"Solved"},
+                {value:"give_up",label:"Give Up"},
+                {value:"archived",label:"Archived"}
             ]
         }
     }
     render() {
         return(
             <div className="container">
+                <Row
+                    justify="start" align="middle"
+                >
+                    <Col span={6}>
+                        <Button
+                            icon={<PlusCircleOutlined/>}
+                            type={"primary"}
+                        >
+                            New Point
+                        </Button>
+                    </Col>
+                    <Col span={2}>Status Filter</Col>
+                    <Col span={7}>
+                        <Select
+                            style={{width:"100%"}}
+                            mode="multiple"
+                            defaultValue={['new', 'solved']}
+                        >
+                            {this.state.statusMap.map((Item)=>{
+                                return(
+                                    <Option value={Item.value} key={Item.value}>{Item.label}</Option>
+                                )
+                            })}
+                        </Select>
+                    </Col>
+                </Row>
                 <hr/>
                 {this.state.points.map((Item,outsideIndex)=>{
+                    let backgroundColor=this.state.statusBackGroupColor[Item.status];
                     return(
                         <Card
+                            style={{backgroundColor:backgroundColor}}
                             key={outsideIndex}
                             className={"Collector"}
                             title={
                                 <Row justify={"center"} align={"middle"} wrap={false} style={{padding:"5px"}}>
-                                    <Col span={20}>
-                                        <textarea
-                                            style={{width:"90%"}}
-                                        />
-                                    </Col>
-                                    <Col span={4}>
-                                        <Row justify={"start"} align={"middle"}>
-                                            <Select>
-                                                <Option value={"new"}>New</Option>
-                                                <Option value={"solved"}>Solved</Option>
-                                                <Option value={"give_up"}>Give Up</Option>
-                                            </Select>
-                                        </Row>
-                                        <Row style={{paddingTop:"4px",paddingBottom:"4px"}} justify={"start"} align={"middle"}>
-                                            <SaveOutlined/>
-                                        </Row>
-                                        <Row justify={"start"} align={"middle"}>
-                                            <PlusCircleOutlined/>
-                                        </Row>
-                                    </Col>
+                                    <textarea
+                                        value={Item.keyword}
+                                    />
                                 </Row>
                             }
                         >
+                            <Card
+                                className={"actions"}
+                                style={{backgroundColor:backgroundColor}}
+                            >
+                                <Card.Grid className={"icons"}>
+                                    <PlusCircleOutlined/>
+                                </Card.Grid>
+                                <Card.Grid className={"icons"}>
+                                    <SaveOutlined />
+                                </Card.Grid>
+                                <Card.Grid>
+                                    <Select value={Item.status} className={Item.status}>
+                                        {this.state.statusMap.map((Item)=>{
+                                            return(
+                                                <Option value={Item.value} key={Item.value}>{Item.label}</Option>
+                                            )
+                                        })}
+                                    </Select>
+                                </Card.Grid>
+                                <Card.Grid className={"icons"}>
+                                    <DeleteOutlined/>
+                                </Card.Grid>
+                                <Card.Grid className={"icons"}>
+                                    <UnorderedListOutlined />
+                                </Card.Grid>
+                            </Card>
                             {Item.children.map((childItem,index)=>{
                                 return(
                                     <Point
