@@ -3,6 +3,9 @@
     float: left;
     border: 3px solid white !important;
 }
+.Collector .ant-select:not(.ant-select-customize-input) .ant-select-selector{
+    border: 1px solid #f0f0f0;
+}
 .Collector input{
     border: 1px solid #F0F0F0;
 }
@@ -26,8 +29,8 @@
     width: 100% !important;
 }
 
-.Collector .new{
-    background-color: #EAEDF2;
+.Collector .new .ant-select-selector{
+    background-color: #EAEDF2 !important;
 }
 
 .Collector .solved .ant-select-selector{
@@ -35,11 +38,11 @@
 }
 
 .Collector .give_up .ant-select-selector{
-    background-color: #FFFBE6;
+    background-color: #FFFBE6 !important;
 }
 
 .Collector .archived .ant-select-selector{
-    background-color: #E6F7FF;
+    background-color: #E6F7FF !important;
 }
 .Collector .init .ant-select-selector{
     background-color: #FF4D4F !important;

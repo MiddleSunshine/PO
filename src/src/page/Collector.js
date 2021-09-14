@@ -2,7 +2,7 @@ import React from 'react'
 import Point from "../component/point";
 import {Card,Select,Row,Col,Button} from "antd";
 import "./../css/Collector.css"
-import {SaveOutlined,PlusCircleOutlined,DeleteOutlined,UnorderedListOutlined} from '@ant-design/icons';
+import {SaveOutlined,PlusCircleOutlined,DeleteOutlined,UnorderedListOutlined,FileMarkdownOutlined} from '@ant-design/icons';
 import config from "../config/setting";
 
 const { Option } = Select;
@@ -29,15 +29,21 @@ class Collector extends React.Component{
         }
         this.newSubPoint=this.newSubPoint.bind(this);
         this.newPoint=this.newPoint.bind(this);
+        this.savePoint=this.savePoint.bind(this);
+        this.deletePoint=this.deletePoint.bind(this);
+        this.openNewPage=this.openNewPage.bind(this);
+        this.showMoreFile=this.showMoreFile.bind(this);
+        this.handleInputChange=this.handleInputChange.bind(this);
+        this.handleSelectorChange=this.handleSelectorChange.bind(this);
     }
     newSubPoint(pid,index){
         let points=this.state.points;
-        let newSubPoint={
+        let newSubPointItem={
             id:0,
             pid:0,
             status:'init'
         };
-        points[index].children.push(newSubPoint);
+        points[index].children.push(newSubPointItem);
         this.setState({
             points:points
         });
@@ -56,6 +62,36 @@ class Collector extends React.Component{
         this.setState({
             points:points
         })
+    }
+    handleInputChange(event,index){
+        let points=this.state.points;
+        points[index].keyword=event.target.value;
+        this.setState({
+            points:points
+        });
+    }
+    handleSelectorChange(newStatus,index){
+        let points=this.state.points;
+        if (!points[index].id){
+            points[index].status=newStatus;
+            this.setState({
+                points:points
+            });
+        }else{
+            // todo 这里还差直接修改数据库的部分
+        }
+    }
+    savePoint(index){
+
+    }
+    deletePoint(index,force=false){
+
+    }
+    openNewPage(){
+
+    }
+    showMoreFile(){
+
     }
     render() {
         return(
@@ -99,6 +135,7 @@ class Collector extends React.Component{
                                 <Row justify={"center"} align={"middle"} wrap={false} style={{padding:"5px"}}>
                                     <textarea
                                         value={Item.keyword}
+                                        onChange={(e)=>this.handleInputChange(e,outsideIndex)}
                                     />
                                 </Row>
                             }
@@ -106,16 +143,21 @@ class Collector extends React.Component{
                             <Card
                                 className={"actions"}
                                 style={{backgroundColor:backgroundColor}}
-                                onClick={()=>this.newSubPoint(Item.id,outsideIndex)}
                             >
                                 <Card.Grid className={"icons"}>
-                                    <PlusCircleOutlined/>
+                                    <PlusCircleOutlined
+                                        onClick={()=>this.newSubPoint(Item.id,outsideIndex)}
+                                    />
                                 </Card.Grid>
                                 <Card.Grid className={"icons"}>
                                     <SaveOutlined />
                                 </Card.Grid>
                                 <Card.Grid>
-                                    <Select value={Item.status} className={Item.status}>
+                                    <Select
+                                        value={Item.status}
+                                        className={Item.status}
+                                        onChange={(value)=>this.handleSelectorChange(value,outsideIndex)}
+                                    >
                                         {this.state.statusMap.map((Item)=>{
                                             return(
                                                 <Option value={Item.value} key={Item.value}>{Item.label}</Option>
@@ -128,6 +170,9 @@ class Collector extends React.Component{
                                 </Card.Grid>
                                 <Card.Grid className={"icons"}>
                                     <UnorderedListOutlined />
+                                </Card.Grid>
+                                <Card.Grid className={"icons"}>
+                                    <FileMarkdownOutlined />
                                 </Card.Grid>
                             </Card>
                             {Item.children.map((childItem,index)=>{
