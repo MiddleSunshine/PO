@@ -11,18 +11,19 @@ class Collector extends React.Component{
     constructor(props) {
         super(props);
         this.state={
-            id:0,
+            id:props.match.params.pid,
+            statusFilter:['new','solved'],
             points:[
-                {
-                    id:0,
-                    keyword:'输入内容',
-                    status:'solved',
-                    children:[
-                        {
-                            id:0
-                        }
-                    ]
-                }
+                // {
+                //     id:0,
+                //     keyword:'输入内容',
+                //     status:'solved',
+                //     children:[
+                //         {
+                //             id:0
+                //         }
+                //     ]
+                // }
             ],
             statusBackGroupColor:config.statusBackGroupColor,
             statusMap:config.statusMap
@@ -35,11 +36,32 @@ class Collector extends React.Component{
         this.showMoreFile=this.showMoreFile.bind(this);
         this.handleInputChange=this.handleInputChange.bind(this);
         this.handleSelectorChange=this.handleSelectorChange.bind(this);
+        this.getPointsByPID=this.getPointsByPID.bind(this);
+    }
+    componentDidMount() {
+        this.getPointsByPID(this.state.id);
+    }
+
+    getPointsByPID(pid){
+        fetch(config.back_domain+"/index.php?action=Points&method=Index&id="+pid,{
+            method:"post",
+            mode:"cors",
+            body:JSON.stringify({
+                status:this.state.statusFilter.join(",")
+            })
+        })
+            .then((res)=>{
+            res.json().then((json)=>{
+                this.setState({
+                    points:json.Data.points?json.Data.points:[]
+                })
+            })
+        })
     }
     newSubPoint(pid,index){
         let points=this.state.points;
         let newSubPointItem={
-            id:0,
+            ID:0,
             pid:0,
             status:'init'
         };
@@ -50,7 +72,7 @@ class Collector extends React.Component{
     }
     newPoint(){
         var newPoint={
-            id:0,
+            ID:0,
             pid:0,
             keyword:'',
             status:'init',
@@ -72,7 +94,7 @@ class Collector extends React.Component{
     }
     handleSelectorChange(newStatus,index){
         let points=this.state.points;
-        if (!points[index].id){
+        if (!points[index].ID){
             points[index].status=newStatus;
             this.setState({
                 points:points
@@ -85,7 +107,17 @@ class Collector extends React.Component{
 
     }
     deletePoint(index,force=false){
-
+        let point=this.state.points[index];
+        if (point.ID){
+            // todo 这里还需要特殊的删除部分
+        }else{
+            let points=this.state.points.filter((Item,i)=>{
+                return i!==index;
+            });
+            this.setState({
+                points:points
+            });
+        }
     }
     openNewPage(){
 
@@ -113,7 +145,12 @@ class Collector extends React.Component{
                         <Select
                             style={{width:"100%"}}
                             mode="multiple"
-                            defaultValue={['new', 'solved']}
+                            defaultValue={this.state.statusFilter}
+                            onChange={(value)=>{
+                                this.setState({
+                                    statusFilter:value
+                                });
+                            }}
                         >
                             {this.state.statusMap.map((Item)=>{
                                 return(
@@ -146,7 +183,7 @@ class Collector extends React.Component{
                             >
                                 <Card.Grid className={"icons"}>
                                     <PlusCircleOutlined
-                                        onClick={()=>this.newSubPoint(Item.id,outsideIndex)}
+                                        onClick={()=>this.newSubPoint(Item.ID,outsideIndex)}
                                     />
                                 </Card.Grid>
                                 <Card.Grid className={"icons"}>
@@ -166,7 +203,9 @@ class Collector extends React.Component{
                                     </Select>
                                 </Card.Grid>
                                 <Card.Grid className={"icons"}>
-                                    <DeleteOutlined/>
+                                    <DeleteOutlined
+                                        onClick={()=>this.deletePoint(outsideIndex)}
+                                    />
                                 </Card.Grid>
                                 <Card.Grid className={"icons"}>
                                     <UnorderedListOutlined />
@@ -179,8 +218,8 @@ class Collector extends React.Component{
                                 return(
                                     <Point
                                         key={index}
-                                        pid={Item.id}
-                                        id={childItem.id}
+                                        pid={Item.ID}
+                                        id={childItem.ID}
                                     />
                                 )
                             })}
