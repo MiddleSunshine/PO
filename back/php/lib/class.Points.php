@@ -10,6 +10,7 @@ class Points extends Base{
 
     public function Index(){
         $pid=$this->get["id"] ?? 0;
+        $this->post=json_decode($this->post,1);
         $status=$this->post["status"] ?? sprintf("%s,%s",self::STATUS_NEW,self::STATUS_SOLVED);
         $searchStatus=[];
         foreach (explode(",",$status) as $str){
@@ -88,7 +89,7 @@ class Points extends Base{
 
     public function getPointDetail($pid,$staus=''){
         if ($staus){
-            $sql=sprintf("select ID,keyword,status,Point from %s where ID=%d and status in (%s) and Deleted=0;",static::$table,$pid,$staus);
+            $sql=sprintf("select ID,keyword,status,Point from %s where ID=%d and status in (%s) and Deleted=0",static::$table,$pid,$staus);
         }else{
             $sql=sprintf("select ID,keyword,status,Point from %s where ID=%d and Deleted=0;",static::$table,$pid,$staus);
         }

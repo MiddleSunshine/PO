@@ -47,6 +47,7 @@ class Collector extends React.Component{
         this.handleSelectorChange=this.handleSelectorChange.bind(this);
         this.getPointsByPID=this.getPointsByPID.bind(this);
         this.getPointDetail=this.getPointDetail.bind(this);
+        this.filterPoint=this.filterPoint.bind(this);
     }
     componentDidMount() {
         this.getPointsByPID(this.state.id);
@@ -213,6 +214,15 @@ class Collector extends React.Component{
         }
         window.open(config.front_domain+"/points/"+point.ID);
     }
+    filterPoint(value){
+        (async ()=>{
+            this.setState({
+                statusFilter:value
+            });
+        })().then(()=>{
+            this.getPointsByPID(this.state.id);
+        })
+    }
     showMoreFile(){
 
     }
@@ -267,7 +277,7 @@ class Collector extends React.Component{
                 <Row
                     justify="start" align="middle"
                 >
-                    <Col span={6}>
+                    <Col span={3}>
                         <Button
                             icon={<PlusCircleOutlined/>}
                             type={"primary"}
@@ -282,11 +292,7 @@ class Collector extends React.Component{
                             style={{width:"100%"}}
                             mode="multiple"
                             defaultValue={this.state.statusFilter}
-                            onChange={(value)=>{
-                                this.setState({
-                                    statusFilter:value
-                                });
-                            }}
+                            onChange={(value)=>this.filterPoint(value)}
                         >
                             {this.state.statusMap.map((Item)=>{
                                 return(
