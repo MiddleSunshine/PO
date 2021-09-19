@@ -4,6 +4,7 @@ import {Card,Select,Row,Col,Button,message,Switch,Tooltip} from "antd";
 import "./../css/Collector.css"
 import {SaveOutlined,PlusCircleOutlined,DeleteOutlined,UnorderedListOutlined,FileMarkdownOutlined,SketchOutlined} from '@ant-design/icons';
 import config from "../config/setting";
+import {fetch} from "whatwg-fetch";
 
 const { Option } = Select;
 
@@ -13,6 +14,14 @@ class Collector extends React.Component{
         this.state={
             id:props.match.params.pid,
             statusFilter:['new','solved'],
+            parentPoint:{
+                id:props.match.params.pid,
+                AddTime:'',
+                LastUpdateTime:'',
+                file:'',
+                url:'',
+                keyword:''
+            },
             points:[
                 // {
                 //     id:0,
@@ -37,9 +46,11 @@ class Collector extends React.Component{
         this.handleInputChange=this.handleInputChange.bind(this);
         this.handleSelectorChange=this.handleSelectorChange.bind(this);
         this.getPointsByPID=this.getPointsByPID.bind(this);
+        this.getPointDetail=this.getPointDetail.bind(this);
     }
     componentDidMount() {
         this.getPointsByPID(this.state.id);
+        this.getPointDetail(this.state.id);
     }
     // 初始化页面
     getPointsByPID(pid){
@@ -57,6 +68,18 @@ class Collector extends React.Component{
                 })
             })
         })
+    }
+    getPointDetail(id){
+        if (id){
+            fetch(config.back_domain+"/index.php?action=Points&method=GetAPoint&id="+id)
+                .then((res)=>{
+                    res.json().then((json)=>{
+                        this.setState({
+                            parentPoint:json.Data
+                        })
+                    })
+                })
+        }
     }
     // 创建新的孩子节点
     newSubPoint(pid,index){
@@ -196,6 +219,51 @@ class Collector extends React.Component{
     render() {
         return(
             <div className="container">
+                <Row>
+                    <h1>keyword:{this.state.parentPoint.keyword}</h1>
+                </Row>
+                <hr/>
+                <Row
+                    style={{backgroundColor:config.statusBackGroupColor[this.state.parentPoint.status],padding:"10px"}}
+                    justify="start" align="top"
+                >
+                    <Col span={8}>
+                        <Row>ID:{this.state.parentPoint.ID}</Row>
+                        <Row>Point:{this.state.parentPoint.Point}</Row>
+                        <Row>Status:{this.state.parentPoint.status}</Row>
+                    </Col>
+                    <Col span={8}>
+                        <Row>AddTime:{this.state.parentPoint.AddTime}</Row>
+                        <Row>LastUpdateTime:{this.state.parentPoint.LastUpdateTime}</Row>
+                    </Col>
+                    <Col span={8}>
+                        {
+                            this.state.parentPoint.file?
+                                <Row>
+                                    File:<span>{this.state.parentPoint.file}</span>
+                                </Row>
+                                :''
+                        }
+                        {
+                            this.state.parentPoint.url?
+                                <Row>
+                                    Url:<a href={this.state.parentPoint.url} target={"_blank"}>&nbsp;open new page</a>
+                                </Row>
+                                :''
+                        }
+                    </Col>
+                </Row>
+                <hr/>
+                {
+                    this.state.parentPoint.note?
+                        <Row>
+                            <Row>
+                                Note:{this.state.parentPoint.note}
+                            </Row>
+                        </Row>
+                        :''
+                }
+                <hr/>
                 <Row
                     justify="start" align="middle"
                 >

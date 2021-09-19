@@ -40,11 +40,15 @@ class Point extends React.Component{
         });
     }
     savePoint(deleted=0){
+        if (!this.pid){
+            message.error("Save Parent Point First!");
+            return false;
+        }
         let point={
             ID:this.state.id,
             keyword:this.state.keyword,
             Deleted:deleted,
-            point:this.state.point
+            Point:this.state.point
         };
         fetch(config.back_domain+"/index.php?action=Points&method=Save",
             {
