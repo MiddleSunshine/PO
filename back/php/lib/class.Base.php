@@ -62,10 +62,12 @@ class Base{
             $sql=sprintf("update %s set {$sql} where ID={$id};",static::$table);
         }else{
             $sqlTemplate='';
+            $fields=[];
             foreach ($sql as $filed=>$value){
                 if (!in_array($filed,$tableField)){
                     continue;
                 }
+                $fields[]=$filed;
                 $sqlTemplate.=sprintf("'%s',",$value);
             }
             $sqlTemplate=substr($sqlTemplate,0,-1);
@@ -76,7 +78,7 @@ class Base{
                 return $this->handleSql($sql,$data['ID'],$keyName);
             }
             // insert
-            $sql=sprintf("insert into %s(%s) value(%s)",static::$table,implode(",",array_keys($sql)),$sqlTemplate);
+            $sql=sprintf("insert into %s(%s) value(%s)",static::$table,implode(",",$fields),$sqlTemplate);
         }
         $this->pdo->query($sql);
         $sql=sprintf("select ID from %s where {$keyName}='%s';",static::$table,$this->post[$keyName] ?? '');

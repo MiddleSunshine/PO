@@ -1,6 +1,6 @@
 import React from 'react'
 import Point from "../component/point";
-import {Card,Select,Row,Col,Button,message,Switch} from "antd";
+import {Card,Select,Row,Col,Button,message,Switch,Tooltip} from "antd";
 import "./../css/Collector.css"
 import {SaveOutlined,PlusCircleOutlined,DeleteOutlined,UnorderedListOutlined,FileMarkdownOutlined,SketchOutlined} from '@ant-design/icons';
 import config from "../config/setting";
@@ -146,9 +146,11 @@ class Collector extends React.Component{
                 res.json().then((json)=>{
                     if (!json.Status){
                         message.error(json.Message);
+                        return false;
                     }else{
                         point.ID=json.Data.ID;
                         let points=this.state.points;
+                        message.success("Update Success!");
                         points[index]=point;
                         this.setState({
                             points:points
@@ -183,8 +185,8 @@ class Collector extends React.Component{
     openNewPage(index){
         let point=this.state.points[index];
         if(!point.ID){
-            this.savePoint(index);
-            point=this.state.points[index];
+            message.error("Please Save First");
+            return false;
         }
         window.open(config.front_domain+"/points/"+point.ID);
     }
@@ -251,7 +253,11 @@ class Collector extends React.Component{
                                     className={"icons"}
                                     onClick={()=>this.openNewPage(outsideIndex)}
                                 >
-                                    <span>ID:{Item.ID}</span>
+                                    <Tooltip
+                                        title={"open new page"}
+                                    >
+                                        <span>ID:{Item.ID}</span>
+                                    </Tooltip>
                                 </Card.Grid>
                                 <Card.Grid className={"icons"}>
                                     <input
@@ -262,19 +268,31 @@ class Collector extends React.Component{
                                     />
                                 </Card.Grid>
                                 <Card.Grid className={"icons"}>
-                                    <SketchOutlined />
+                                    <Tooltip
+                                        title={"开发中"}
+                                    >
+                                        <SketchOutlined />
+                                    </Tooltip>
                                 </Card.Grid>
                                 <Card.Grid
                                     className={"icons"}
                                     onClick={()=>this.newSubPoint(Item.ID,outsideIndex)}
                                 >
-                                    <PlusCircleOutlined/>
+                                    <Tooltip
+                                        title={"create new sub point"}
+                                    >
+                                        <PlusCircleOutlined/>
+                                    </Tooltip>
                                 </Card.Grid>
                                 <Card.Grid
                                     className={"icons"}
                                     onClick={()=>this.savePoint(outsideIndex)}
                                 >
-                                    <SaveOutlined/>
+                                    <Tooltip
+                                        title={"Save"}
+                                    >
+                                        <SaveOutlined/>
+                                    </Tooltip>
                                 </Card.Grid>
                                 <Card.Grid>
                                     <Select
@@ -293,25 +311,36 @@ class Collector extends React.Component{
                                     className={"icons"}
                                     onClick={()=>this.deletePoint(outsideIndex)}
                                 >
-                                    <DeleteOutlined/>
+                                    <Tooltip
+                                        color={"red"}
+                                        title={"Delete the Point"}
+                                    >
+                                        <DeleteOutlined/>
+                                    </Tooltip>
                                 </Card.Grid>
                                 <Card.Grid className={"icons"}>
-                                    <Switch
-                                        checkedChildren={"detail"}
-                                        unCheckedChildren={"hide"}
-                                        defaultChecked
-                                        value={Item.showDetail?Item.showDetail:true}
-                                        onChange={(newValue)=>{
-                                            let points=this.state.points;
-                                            points[outsideIndex].showDetail=newValue;
-                                            this.setState({
-                                                points:points
-                                            });
-                                        }}
-                                    />
+                                    <Tooltip
+                                        title={"Show/Hide the sub points"}
+                                    >
+                                        <Switch
+                                            checkedChildren={"detail"}
+                                            unCheckedChildren={"hide"}
+                                            defaultChecked
+                                            value={Item.showDetail?Item.showDetail:true}
+                                            onChange={(newValue)=>{
+                                                let points=this.state.points;
+                                                points[outsideIndex].showDetail=newValue;
+                                                this.setState({
+                                                    points:points
+                                                });
+                                            }}
+                                        />
+                                    </Tooltip>
                                 </Card.Grid>
                                 <Card.Grid className={"icons"}>
-                                    <FileMarkdownOutlined />
+                                    <Tooltip title={"开发中"}>
+                                        <FileMarkdownOutlined />
+                                    </Tooltip>
                                 </Card.Grid>
                             </Card>
                             {(Item.showDetail===undefined?true:Item.showDetail)?Item.children.map((childItem,index)=>{

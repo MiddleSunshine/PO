@@ -62,14 +62,16 @@ class Points extends Base{
             // insert
             $point['AddTime']=date("Y-m-d H:i:s");
             $point['LastUpdateTime']=date("Y-m-d H:i:s");
+            empty($point['status']) && $point['status']=self::STATUS_NEW;
             $this->handleSql($point,0,'keyword');
         }
-        $sql=sprintf("select ID from %s where keyword='%s'",static::$table,$point['keyword']);
+        $sql=sprintf("select ID,status from %s where keyword='%s'",static::$table,$point['keyword']);
         $point=$this->pdo->getFirstRow($sql);
         $pointsConnection=new PointsConnection();
         $pointsConnection->updatePointsConnection($pid,$point['ID']);
         return self::returnActionResult([
-            'ID'=>$point['ID']
+            'ID'=>$point['ID'],
+            'Status'=>$point['status']
         ]);
     }
 
