@@ -45,26 +45,26 @@ class Points extends Base{
 
     public function Save(){
         $postData=json_decode($this->post,1);
-        if (empty($postData['keyword'])){
+        $point=$postData['point'];
+        if (empty($point['keyword'])){
             return self::returnActionResult([],false,"keyword不能为空");
         }
         if (!isset($postData['PID'])){
             return self::returnActionResult([],false,"PID Error");
         }
         $pid=$postData['PID'];
-        unset($postData['PID']);
-        if (!empty($postData['ID'])){
+        if (!empty($point['ID'])){
             // update
-            $postData['LastUpdateTime']=date("Y-m-d H:i:s");
-            $this->handleSql($postData,$postData['ID'],'keyword');
+            $point['LastUpdateTime']=date("Y-m-d H:i:s");
+            $this->handleSql($point,$point['ID'],'keyword');
         }else{
-            unset($postData['ID']);
+            unset($point['ID']);
             // insert
-            $postData['AddTime']=date("Y-m-d H:i:s");
-            $postData['LastUpdateTime']=date("Y-m-d H:i:s");
-            $this->handleSql($postData,0,'keyword');
+            $point['AddTime']=date("Y-m-d H:i:s");
+            $point['LastUpdateTime']=date("Y-m-d H:i:s");
+            $this->handleSql($point,0,'keyword');
         }
-        $sql=sprintf("select ID from %s where keyword='%s'",static::$table,$postData['keyword']);
+        $sql=sprintf("select ID from %s where keyword='%s'",static::$table,$point['keyword']);
         $point=$this->pdo->getFirstRow($sql);
         $pointsConnection=new PointsConnection();
         $pointsConnection->updatePointsConnection($pid,$point['ID']);
@@ -86,9 +86,9 @@ class Points extends Base{
 
     public function getPointDetail($pid,$staus=''){
         if ($staus){
-            $sql=sprintf("select ID,keyword,status from %s where ID=%d and status in (%s);",static::$table,$pid,$staus);
+            $sql=sprintf("select ID,keyword,status,Point from %s where ID=%d and status in (%s) and Deleted=0;",static::$table,$pid,$staus);
         }else{
-            $sql=sprintf("select ID,keyword,status from %s where ID=%d;",static::$table,$pid,$staus);
+            $sql=sprintf("select ID,keyword,status,Point from %s where ID=%d and Deleted=0;",static::$table,$pid,$staus);
         }
         return $this->pdo->getFirstRow($sql);
     }

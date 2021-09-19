@@ -5,7 +5,7 @@ class Base{
     public static $table='';
     protected $get;
     protected $post;
-    protected $pdo;
+    public $pdo;
     public function __construct($get=[],$post=[])
     {
         $this->get=$get;
@@ -48,9 +48,13 @@ class Base{
         }
     }
     public function handleSql($sql,$id,$keyName){
+        $tableField=$this->getTableField();
         if($id){
             $sqlTemplate=[];
             foreach ($sql as $filed=>$value){
+                if (!in_array($filed,$tableField)){
+                    continue;
+                }
                 $sqlTemplate[]=sprintf("%s='%s'",$filed,$value);
             }
             $sql=implode(",",$sqlTemplate);
@@ -59,6 +63,9 @@ class Base{
         }else{
             $sqlTemplate='';
             foreach ($sql as $filed=>$value){
+                if (!in_array($filed,$tableField)){
+                    continue;
+                }
                 $sqlTemplate.=sprintf("'%s',",$value);
             }
             $sqlTemplate=substr($sqlTemplate,0,-1);
@@ -78,5 +85,11 @@ class Base{
             'sql'=>$sql,
             'ID'=>$word['ID'] ?? 0
         ]);
+    }
+
+    public function getTableField($table=''){
+        $sql="desc ".($table?:static::$table);
+        $columns=$this->pdo->getRows($sql);
+        return array_column($columns,'Field');
     }
 }

@@ -1,8 +1,8 @@
 import React from 'react'
 import Point from "../component/point";
-import {Card,Select,Row,Col,Button,message} from "antd";
+import {Card,Select,Row,Col,Button,message,Switch} from "antd";
 import "./../css/Collector.css"
-import {SaveOutlined,PlusCircleOutlined,DeleteOutlined,UnorderedListOutlined,FileMarkdownOutlined} from '@ant-design/icons';
+import {SaveOutlined,PlusCircleOutlined,DeleteOutlined,UnorderedListOutlined,FileMarkdownOutlined,SketchOutlined} from '@ant-design/icons';
 import config from "../config/setting";
 
 const { Option } = Select;
@@ -41,7 +41,7 @@ class Collector extends React.Component{
     componentDidMount() {
         this.getPointsByPID(this.state.id);
     }
-
+    // 初始化页面
     getPointsByPID(pid){
         fetch(config.back_domain+"/index.php?action=Points&method=Index&id="+pid,{
             method:"post",
@@ -58,6 +58,7 @@ class Collector extends React.Component{
             })
         })
     }
+    // 创建新的孩子节点
     newSubPoint(pid,index){
         let points=this.state.points;
         let newSubPointItem={
@@ -70,6 +71,7 @@ class Collector extends React.Component{
             points:points
         });
     }
+    // 创建新的兄弟节点
     newPoint(){
         var newPoint={
             ID:0,
@@ -85,6 +87,7 @@ class Collector extends React.Component{
             points:points
         })
     }
+    // 处理兄弟节点的输入框修改
     handleInputChange(event,index){
         let points=this.state.points;
         points[index].keyword=event.target.value;
@@ -92,6 +95,7 @@ class Collector extends React.Component{
             points:points
         });
     }
+    // 处理兄弟节点的select框修改
     handleSelectorChange(newStatus,index){
         let points=this.state.points;
         if (!points[index].ID){
@@ -100,9 +104,28 @@ class Collector extends React.Component{
                 points:points
             });
         }else{
-            // todo 这里还差直接修改数据库的部分
+            (async ()=>{
+                let points=this.state.points;
+                points[index].status=newStatus;
+                this.setState({
+                    points:points
+                });
+            })().then(
+                ()=>{
+                    this.savePoint(index);
+                }
+            );
         }
     }
+    // 处理分值修改
+    handlePointChange(event,index){
+        let points=this.state.points;
+        points[index].Point=event.target.value;
+        this.setState({
+            points:points
+        });
+    }
+    // 保存效果
     savePoint(index){
         let point=this.state.points[index];
         if (point.status==='init'){
@@ -114,9 +137,7 @@ class Collector extends React.Component{
                 method:"post",
                 mode:"cors",
                 body:JSON.stringify({
-                    ID:point.ID,
-                    keyword:point.keyword,
-                    status:point.status,
+                    point,
                     PID:this.state.id
                 })
             }
@@ -136,10 +157,19 @@ class Collector extends React.Component{
                 })
             })
     }
+    // 删除节点
     deletePoint(index,force=false){
         let point=this.state.points[index];
         if (point.ID){
-            // todo 这里还需要特殊的删除部分
+            (async ()=>{
+                let points=this.state.points;
+                points[index].Deleted=1;
+                this.setState({
+                    points:points
+                });
+            })().then(()=>{
+                this.savePoint(index);
+            });
         }else{
             let points=this.state.points.filter((Item,i)=>{
                 return i!==index;
@@ -149,6 +179,7 @@ class Collector extends React.Component{
             });
         }
     }
+    // 打开新的页面
     openNewPage(index){
         let point=this.state.points[index];
         if(!point.ID){
@@ -218,6 +249,23 @@ class Collector extends React.Component{
                             >
                                 <Card.Grid
                                     className={"icons"}
+                                    onClick={()=>this.openNewPage(outsideIndex)}
+                                >
+                                    <span>ID:{Item.ID}</span>
+                                </Card.Grid>
+                                <Card.Grid className={"icons"}>
+                                    <input
+                                        value={Item.Point}
+                                        style={{width:"100%"}}
+                                        placeholder={"Point"}
+                                        onChange={(e)=>this.handlePointChange(e,outsideIndex)}
+                                    />
+                                </Card.Grid>
+                                <Card.Grid className={"icons"}>
+                                    <SketchOutlined />
+                                </Card.Grid>
+                                <Card.Grid
+                                    className={"icons"}
                                     onClick={()=>this.newSubPoint(Item.ID,outsideIndex)}
                                 >
                                     <PlusCircleOutlined/>
@@ -248,13 +296,25 @@ class Collector extends React.Component{
                                     <DeleteOutlined/>
                                 </Card.Grid>
                                 <Card.Grid className={"icons"}>
-                                    <UnorderedListOutlined />
+                                    <Switch
+                                        checkedChildren={"detail"}
+                                        unCheckedChildren={"hide"}
+                                        defaultChecked
+                                        value={Item.showDetail?Item.showDetail:true}
+                                        onChange={(newValue)=>{
+                                            let points=this.state.points;
+                                            points[outsideIndex].showDetail=newValue;
+                                            this.setState({
+                                                points:points
+                                            });
+                                        }}
+                                    />
                                 </Card.Grid>
                                 <Card.Grid className={"icons"}>
                                     <FileMarkdownOutlined />
                                 </Card.Grid>
                             </Card>
-                            {Item.children.map((childItem,index)=>{
+                            {(Item.showDetail===undefined?true:Item.showDetail)?Item.children.map((childItem,index)=>{
                                 return(
                                     <Point
                                         key={index}
@@ -262,7 +322,7 @@ class Collector extends React.Component{
                                         id={childItem.ID}
                                     />
                                 )
-                            })}
+                            }):''}
                         </Card>
                     )
                 })}

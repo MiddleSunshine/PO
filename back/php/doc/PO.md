@@ -9,6 +9,7 @@ CREATE TABLE `Points` (
   `status` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `AddTime` datetime DEFAULT NULL,
   `LastUpdateTime` datetime DEFAULT NULL,
+  `Point` int(255) DEFAULT '0',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 ```

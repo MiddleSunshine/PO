@@ -8,3 +8,7 @@ back/data/mysql/
 back/nginx/log/
 
 back/php/.idea/
+
+.DS_Store
+
+back/php/debug/
