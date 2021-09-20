@@ -100,6 +100,15 @@ class Index extends React.Component {
                                 Report
                             </Button>
                         </Col>
+                        <Col span={2}>
+                            <Button
+                                type={"link"}
+                                href={"./willing"}
+                                target={"_blank"}
+                            >
+                                Willing
+                            </Button>
+                        </Col>
                     </Row>
                 </Content>
                 <Footer>
