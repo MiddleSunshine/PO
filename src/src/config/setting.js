@@ -1,13 +1,21 @@
 var config = {
     front_domain:'http://localhost:3000',
-    back_domain: 'http://localhost:8090',
+    back_domain: 'http://localhost:8091',
     common_road: [
-        {path: '/', name: 'Home'},
-        {path: '/web', name: 'Web'},
-        {path: '/sentence/list', name: 'Sentence List'},
-        {path: '/words/list', name: 'Words List'},
-        {path: '/check/list', name: 'Check List'}
-    ]
+    ],
+    statusMap:[
+        {value:"new",label:"New"},
+        {value:"solved",label:"Solved"},
+        {value:"give_up",label:"Give Up"},
+        {value:"archived",label:"Archived"}
+    ],
+    statusBackGroupColor:{
+        new:"#EAEDF2",
+        solved:"#F6FFED",
+        give_up:"#FFFBE6",
+        archived:"#E6F7FF",
+        init:"#FFF2F0",
+    }
 }
 
 export default config

@@ -6,16 +6,16 @@ services:
       - "8091:8080"
     tty: true
     volumes:
-      - /Users/yangqingxian/Documents/www/wwwroot/ER/PO/PO/back/php:/app
-      - /Users/yangqingxian/Documents/www/wwwroot/ER/PO/PO/back/nginx/conf:/opt/bitnami/nginx/conf/server_blocks
-      - /Users/yangqingxian/Documents/www/wwwroot/ER/PO/PO/back/nginx/log:/opt/bitnami/nginx/logs
+      - /Users/yangqingxian/Documents/PO/PO/back/php:/app
+      - /Users/yangqingxian/Documents/PO/PO/back/nginx/conf:/opt/bitnami/nginx/conf/server_blocks
+      - /Users/yangqingxian/Documents/PO/PO/back/nginx/log:/opt/bitnami/nginx/logs
     networks:
       lnmp-network:
         ipv4_address: 172.19.0.6
   php:
     image: bitnami/php-fpm
     volumes:
-      - /Users/yangqingxian/Documents/www/wwwroot/ER/PO/PO/back/php:/app
+      - /Users/yangqingxian/Documents/PO/PO/back/php:/app
     networks:
       lnmp-network:
         ipv4_address: 172.19.0.7
@@ -27,7 +27,7 @@ services:
     ports:
       - "33306:3306"
     volumes:
-      - /Users/yangqingxian/Documents/www/wwwroot/ER/PO/PO/back/data/mysql:/var/lib/mysql
+      - /Users/yangqingxian/Documents/PO/PO/back/data/mysql:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD='1234qwer'
     networks:
