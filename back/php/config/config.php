@@ -9,6 +9,7 @@ define("PROD_DB_USER","root");
 define("PROD_DB_PASS","1234qwer");
 define("PROD_DB_SOCKET","");
 define("DEBUG_MODE",true);
+define("MYSQL_SET_NAMES","utf8");
 define("INDEX_FILE",dirname(__DIR__));
 
 function __autoload($class){
@@ -20,4 +21,8 @@ function __autoload($class){
         echo "not exists".PHP_EOL;
         exit();
     }
+}
+
+function debug($logFileName,$content){
+    file_put_contents(INDEX_FILE.DIRECTORY_SEPARATOR."log".DIRECTORY_SEPARATOR.$logFileName.".log",date("Y-m-d H:i:s").PHP_EOL.$content.PHP_EOL,FILE_APPEND);
 }

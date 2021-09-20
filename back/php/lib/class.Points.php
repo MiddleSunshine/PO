@@ -8,6 +8,13 @@ class Points extends Base{
     const STATUS_GIVE_UP='give_up';
     const STATUS_ARCHIVED='archived';
 
+    public static $statusMap=[
+        self::STATUS_NEW=>0,
+        self::STATUS_SOLVED=>1,
+        self::STATUS_GIVE_UP=>2,
+        self::STATUS_ARCHIVED=>3
+    ];
+
     public function Index(){
         $pid=$this->get["id"] ?? 0;
         $this->post=json_decode($this->post,1);
@@ -101,7 +108,7 @@ class Points extends Base{
         if ($staus){
             $sql=sprintf("select ID,keyword,status,Point from %s where ID=%d and status in (%s) and Deleted=0",static::$table,$pid,$staus);
         }else{
-            $sql=sprintf("select ID,keyword,status,Point from %s where ID=%d and Deleted=0;",static::$table,$pid,$staus);
+            $sql=sprintf("select ID,keyword,status,Point from %s where ID=%d and Deleted=0;",static::$table,$pid);
         }
         return $this->pdo->getFirstRow($sql);
     }

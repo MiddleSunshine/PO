@@ -40,7 +40,7 @@ class Point extends React.Component{
         });
     }
     savePoint(deleted=0){
-        if (!this.pid){
+        if (!this.state.pid){
             message.error("Save Parent Point First!");
             return false;
         }
