@@ -44,6 +44,16 @@ class Points extends Base{
         return self::returnActionResult($returnData);
     }
 
+    public function Search(){
+        $this->post=json_decode($this->post,1);
+        $sql="select * from ".static::$table." where keyword like '%".$this->post['keyword']."%' and Deleted=0 order by ID desc;";
+        return self::returnActionResult(
+            $this->pdo->getRows($sql),
+            true,
+            $sql
+        );
+    }
+
     public function Save(){
         $postData=json_decode($this->post,1);
         $point=$postData['point'];
