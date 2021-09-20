@@ -13,6 +13,8 @@ class Willing extends React.Component{
             data:[],
             showModal:false,
             editID:'',
+            newAmount:0,
+            exchangedAmount:0
         }
         this.getWillingList=this.getWillingList.bind(this);
         this.switchModal=this.switchModal.bind(this);
@@ -51,7 +53,9 @@ class Willing extends React.Component{
             .then((res)=>{
                 res.json().then((json)=>{
                     this.setState({
-                        data:json.Data
+                        data:json.Data.Points,
+                        newAmount:json.Data.amount.new,
+                        exchangedAmount:json.Data.amount.exchanged
                     })
                 })
             })
@@ -70,12 +74,32 @@ class Willing extends React.Component{
                     </Row>
                 </Header>
                 <Content style={{paddingLeft:"15px",paddingRight:"15px"}}>
-                    <Button
-                        type={"primary"}
-                        onClick={()=>this.updateWilling(-1)}
-                    >
-                        New Willing
-                    </Button>
+                    <Row>
+                        <Col span={4}>
+                            <Button
+                                type={"primary"}
+                                onClick={()=>this.updateWilling(-1)}
+                            >
+                                New Willing
+                            </Button>
+                        </Col>
+                        <Col span={6}>
+                            <Button
+                                ghost={true}
+                                type={"primary"}
+                            >
+                                Your Points Left:{this.state.newAmount}
+                            </Button>
+                        </Col>
+                        <Col span={6}>
+                            <Button
+                                ghost={true}
+                                type={"primary"}
+                            >
+                                Exchanged Point:{this.state.exchangedAmount}
+                            </Button>
+                        </Col>
+                    </Row>
                     <hr/>
                     <Table
                         dataSource={this.state.data}
@@ -119,6 +143,9 @@ class Willing extends React.Component{
                                     return(
                                         <span style={style}>{text}</span>
                                     )
+                                },
+                                sorter:(a,b)=>{
+                                    return a.Point-b.Point;
                                 }
                             },
                             {

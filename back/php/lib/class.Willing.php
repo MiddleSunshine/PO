@@ -3,6 +3,23 @@
 class Willing extends Base{
     public static $table="Willing";
 
+    const STATUS_NEW='new';
+    const STATUS_EXCHANGED='exchanged';
+
+    public function List()
+    {
+        $returnData=parent::List();
+        $returnData['Data']=[
+            'Points'=>$returnData['Data']
+        ];
+        foreach ([self::STATUS_NEW,self::STATUS_EXCHANGED] as $status){
+            $sql=sprintf("select sum(Point) as %s from %s where status='%s'",$status,static::$table,$status);
+            $amount=$this->pdo->getFirstRow($sql);
+            $returnData['Data']['amount'][$status]=$amount[$status];
+        }
+        return $returnData;
+    }
+
     public function Save(){
         $this->post=json_decode($this->post,1);
         $this->post['LastUpdateTime']=date("Y-m-d H:i:s");
