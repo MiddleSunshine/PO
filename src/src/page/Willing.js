@@ -1,6 +1,6 @@
 import React from "react";
 import config from "../config/setting";
-import {Table, Layout, Row, Col, Button,Modal} from 'antd'
+import {Table, Layout, Row, Col, Button,Modal,Tag} from 'antd'
 import {SketchOutlined} from '@ant-design/icons'
 import WillingDetail from "../component/WillingDetail";
 
@@ -88,12 +88,38 @@ class Willing extends React.Component{
                             {
                                 title:"Title",
                                 dataIndex:"note",
-                                key:"ID"
+                                key:"ID",
+                                render:(text,record,index)=>{
+                                    return(
+                                        <Button
+                                            type={"link"}
+                                            onClick={()=>{
+                                                this.updateWilling(index);
+                                            }}
+                                        >
+                                            {record.note}
+                                        </Button>
+                                    )
+                                }
                             },
                             {
                                 title:"Point",
                                 dataIndex: "Point",
-                                key:"ID"
+                                key:"ID",
+                                render:(text,record)=>{
+                                    let style={};
+                                    switch (record.status){
+                                        case "new":
+                                            style={color:"gold"}
+                                            break;
+                                        default:
+                                            style={color:"gray",textDecoration:"line-through"}
+                                            break;
+                                    }
+                                    return(
+                                        <span style={style}>{text}</span>
+                                    )
+                                }
                             },
                             {
                                 title:"Status",
@@ -107,24 +133,42 @@ class Willing extends React.Component{
                                         text:Item.label,
                                         value:Item.value
                                     }
-                                })
+                                }),
+                                render:(text,record)=>{
+                                    let dom;
+                                    switch (record.status){
+                                        case "new":
+                                            dom=<Tag color="processing">
+                                                Created @ {record.AddTime}
+                                            </Tag>
+                                            break;
+                                        default:
+                                            dom=<Tag color={"success"}>
+                                                Exchanged
+                                            </Tag>
+                                            break;
+                                    }
+                                    return dom;
+                                }
                             },
                             {
                                 title:"Option",
                                 dataIndex:'status',
                                 render:(text,record,index)=>{
-                                    let show;
+                                    let show,type;
                                     switch (record.status){
                                         case "new":
                                             show="Exchange";
+                                            type="primary";
                                             break;
                                         default:
                                             show="Exchanged @ "+record.LastUpdateTime;
+                                            type="link";
                                             break;
                                     }
                                     return(
                                         <Button
-                                            type={"primary"}
+                                            type={type}
                                             onClick={()=>{
                                                 this.updateWilling(index)
                                             }}
