@@ -94,4 +94,16 @@ class Base{
         $columns=$this->pdo->getRows($sql);
         return array_column($columns,'Field');
     }
+
+    public static function getDateRange($startTime,$endTime,$dateFormat){
+        $returnData[]=date($dateFormat,strtotime($startTime));
+        $startTime=strtotime($startTime);
+        $endTime=strtotime($endTime);
+        $oneDay=24*60*60;
+        while ($startTime<=$endTime){
+            $returnData[]=date($dateFormat,$startTime+$oneDay);
+            $startTime+=$oneDay;
+        }
+        return $returnData;
+    }
 }

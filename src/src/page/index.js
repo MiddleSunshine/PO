@@ -91,6 +91,15 @@ class Index extends React.Component {
                                 Summary
                             </Button>
                         </Col>
+                        <Col span={2}>
+                            <Button
+                                type={"link"}
+                                href={"./report"}
+                                target={"_blank"}
+                            >
+                                Report
+                            </Button>
+                        </Col>
                     </Row>
                 </Content>
                 <Footer>
