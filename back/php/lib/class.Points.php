@@ -61,16 +61,15 @@ class Points extends Base{
         );
     }
 
-    public function Save(){
+    public function Save($checkPid=true){
         $postData=json_decode($this->post,1);
         $point=$postData['point'];
         if (empty($point['keyword'])){
             return self::returnActionResult([],false,"keyword不能为空");
         }
-        if (!isset($postData['PID'])){
+        if ($checkPid && !isset($postData['PID'])){
             return self::returnActionResult([],false,"PID Error");
         }
-        $pid=$postData['PID'];
         if (!empty($point['ID'])){
             // update
             $point['LastUpdateTime']=date("Y-m-d H:i:s");
@@ -85,8 +84,11 @@ class Points extends Base{
         }
         $sql=sprintf("select ID,status from %s where keyword='%s'",static::$table,$point['keyword']);
         $point=$this->pdo->getFirstRow($sql);
-        $pointsConnection=new PointsConnection();
-        $pointsConnection->updatePointsConnection($pid,$point['ID']);
+        $pid=$postData['PID'];
+        if ($checkPid){
+            $pointsConnection=new PointsConnection();
+            $pointsConnection->updatePointsConnection($pid,$point['ID']);
+        }
         return self::returnActionResult([
             'ID'=>$point['ID'],
             'Status'=>$point['status']
@@ -104,7 +106,7 @@ class Points extends Base{
         );
     }
 
-    public function getDetailWithFile(){
+    public function GetDetailWithFile(){
         $id=$this->get['ID'] ?? 0;
         if (!$id){
             return self::returnActionResult([]);
@@ -114,7 +116,22 @@ class Points extends Base{
         if (!$point){
             return self::returnActionResult([]);
         }
+        return self::returnActionResult([
+            'Point'=>$point,
+            'FileContent'=>File::getFileContent($id,$point['file']),
+            'LocalFilePath'=>File::getHostFilePath($id,$point['file'])
+        ]);
+    }
 
+    public function SaveWithFile(){
+        $dataBaseSaveResult=$this->Save(false);
+        if (!$dataBaseSaveResult['Status']){
+            return $dataBaseSaveResult;
+        }
+        !is_array($this->post) && $this->post=json_decode($this->post,1);
+        $fileContent=$this->post['FileContent'];
+        $fileContent && File::storeFile($dataBaseSaveResult['Data']['ID'],$this->post['point']['file'],$fileContent);
+        return $dataBaseSaveResult;
     }
 
     public function getPointDetail($pid,$staus=''){

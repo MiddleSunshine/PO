@@ -6,7 +6,7 @@ class PointEditor extends React.Component{
     constructor(props) {
         super(props);
         this.state={
-            ID:0
+            ID:props.match.params.pid
         }
     }
     render() {

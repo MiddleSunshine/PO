@@ -1,5 +1,5 @@
 import React from "react";
-import {Form, Input, Select, Button} from "antd";
+import {Form, Input, Select, Button, message, InputNumber} from "antd";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import config from "../config/setting";
@@ -13,16 +13,88 @@ class PointEdit extends React.Component{
         super(props);
         this.state={
             ID:props.ID,
-            point:{},
-            fileContent:""
+            point:{
+                ID:0,
+                keyword:"",
+                note:"",
+                Point:"",
+                file:"",
+                url:"",
+                status:"new",
+                Deleted:'0'
+            },
+            fileContent:"",
+            localFilePath:''
         }
         this.getPointDetail=this.getPointDetail.bind(this);
+        this.handleChange=this.handleChange.bind(this);
+        this.savePoint=this.savePoint.bind(this);
     }
-    getPointDetail(ID){
+    componentDidMount() {
+        if (this.props.ID>0){
+            this.getPointDetail(this.props.ID);
+        }
+    }
 
+    getPointDetail(ID){
+        fetch(config.back_domain+"/index.php?action=Points&method=GetDetailWithFile&ID="+ID)
+            .then((res)=>{
+                res.json().then((json)=>{
+                    this.setState({
+                        point:json.Data.Point?json.Data.Point:this.state.point,
+                        fileContent:json.Data.FileContent,
+                        localFilePath:json.Data.LocalFilePath
+                    })
+                })
+            })
+    }
+
+    savePoint(){
+        fetch(config.back_domain+"/index.php?action=Points&method=SaveWithFile",{
+            mode:"cors",
+            method:"post",
+            body:JSON.stringify({
+                point:this.state.point,
+                FileContent:this.state.fileContent
+            })
+        }).then((res)=>{
+            res.json().then((json)=>{
+                if(json.Status){
+                    this.setState({
+                        ID:json.Data.ID
+                    })
+                    message.success("Save Success!")
+                    return true;
+                }else{
+                    message.error("Save Failed!")
+                    return false;
+                }
+            }).then((saveResult)=>{
+                debugger
+                if(saveResult){
+                    window.location.href=config.front_domain+"/point/edit/"+this.state.ID;
+                }
+            })
+        }).catch((error)=>{
+            console.error("Save Error")
+            console.error(error);
+            message.error("Save Failed!")
+        })
+    }
+
+    handleChange(value,key){
+        let point=this.state.point;
+        point[key]=value;
+        this.setState({
+            point:point
+        });
     }
     render() {
-        return(
+        let info='New Point';
+        if (this.state.point.ID){
+            info="ID:"+this.state.point.ID+" / AddTime:"+this.state.point.AddTime+" / LastUpdateTime:"+this.state.point.LastUpdateTime;
+        }
+       return(
             <div className="container">
                 <Form
                     labelCol={{ span: 4 }}
@@ -31,47 +103,56 @@ class PointEdit extends React.Component{
                     <Form.Item
                         label={"Info"}
                     >
-                        <Input disabled={true} />
+                        <Input disabled={true} value={info} />
                     </Form.Item>
                     <Form.Item
                         label={"Keyword"}
+                        required={true}
                     >
                         <Input
-
+                            value={this.state.point.keyword}
+                            onChange={(e)=>this.handleChange(e.target.value,"keyword")}
                         />
                     </Form.Item>
                     <Form.Item
                         label={"Note"}
                     >
                         <Input
-
+                            value={this.state.point.note}
+                            onChange={(e)=>this.handleChange(e.target.value,"note")}
                         />
                     </Form.Item>
                     <Form.Item
                         label={"Point"}
                     >
                         <Input
-
+                            value={this.state.point.Point}
+                            onChange={(e)=>this.handleChange(e.target.value,"Point")}
                         />
                     </Form.Item>
                     <Form.Item
                         label={"File"}
                     >
                         <Input
-
+                            value={this.state.point.file}
+                            onChange={(e)=>this.handleChange(e.target.value,"file")}
                         />
                     </Form.Item>
                     <Form.Item
                         label={"Url"}
                     >
                         <Input
-
+                            value={this.state.point.url}
+                            onChange={(e)=>this.handleChange(e.target.value,"url")}
                         />
                     </Form.Item>
                     <Form.Item
                         label={"Status"}
                     >
-                        <Select>
+                        <Select
+                            value={this.state.point.status}
+                            onChange={(value)=>this.handleChange(value,"status")}
+                        >
                             {config.statusMap.map((Item)=>{
                                 return(
                                     <Option value={Item.value}>{Item.label}</Option>
@@ -82,16 +163,32 @@ class PointEdit extends React.Component{
                     <Form.Item
                         label={"Deleted"}
                     >
-                        <Select>
-                            <Option value={0}>Active</Option>
-                            <Option value={1}>Deleted</Option>
+                        <Select
+                            value={this.state.point.Deleted}
+                            onChange={(value)=>this.handleChange(value,"Deleted")}
+                        >
+                            <Option value={'0'}>Active</Option>
+                            <Option value={'1'}>Deleted</Option>
                         </Select>
+                    </Form.Item>
+                    <Form.Item
+                        label={"LocalFilePath"}
+                    >
+                        {/*这个值只是做展示的，不需要修改，也不需要保存*/}
+                        <Input
+                            value={this.state.localFilePath}
+                        />
                     </Form.Item>
                     <Form.Item
                         label={"File Content"}
                     >
                         <SimpleMDE
-
+                            value={this.state.fileContent}
+                            onChange={(value)=>{
+                                this.setState({
+                                    fileContent:value
+                                })
+                            }}
                         />
                     </Form.Item>
                     <Form.Item
@@ -99,6 +196,7 @@ class PointEdit extends React.Component{
                     >
                         <Button
                             type={"primary"}
+                            onClick={()=>this.savePoint()}
                         >
                             Save
                         </Button>
