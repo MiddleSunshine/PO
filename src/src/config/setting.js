@@ -15,7 +15,11 @@ var config = {
         give_up:"#FFFBE6",
         archived:"#E6F7FF",
         init:"#FFF2F0",
-    }
+    },
+    willingStatus:[
+        {value:"new",label:"New"},
+        {value:"exchanged",label: "Exchanged"}
+    ]
 }
 
 export default config

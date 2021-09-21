@@ -1,3 +1,4 @@
+# 数据库表结构
 
 ```sql
 CREATE TABLE `Points` (
@@ -22,3 +23,21 @@ CREATE TABLE `Points_Connection` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 ```
+
+```sql
+CREATE TABLE `Willing` (
+ `ID` int(11) NOT NULL AUTO_INCREMENT,
+ `note` text COLLATE utf8_bin,
+`Point` int(255) DEFAULT '0',
+`AddTime` datetime DEFAULT NULL,
+ `LastUpdateTime` datetime DEFAULT NULL,
+ `status` varchar(50) COLLATE utf8_bin DEFAULT 'new',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+```
+
+# 前端插件
+
+- [markdown编辑器](https://uiwjs.github.io/react-markdown-editor/)
+- [markdown预览器](https://github.com/uiwjs/react-markdown-preview)
+

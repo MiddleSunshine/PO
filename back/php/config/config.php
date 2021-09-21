@@ -11,6 +11,8 @@ define("PROD_DB_SOCKET","");
 define("DEBUG_MODE",true);
 define("MYSQL_SET_NAMES","utf8");
 define("INDEX_FILE",dirname(__DIR__));
+define("MD_FILE_INDEX",INDEX_FILE.DIRECTORY_SEPARATOR."md".DIRECTORY_SEPARATOR);
+define("LocalFilePath","/Users/yangqingxian/Documents/PO/PO/back/php/md");
 
 function __autoload($class){
     $fileName=INDEX_FILE.DIRECTORY_SEPARATOR."lib".DIRECTORY_SEPARATOR."class.".$class.".php";

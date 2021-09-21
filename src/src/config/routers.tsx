@@ -2,6 +2,9 @@ import Index from '../page/index'
 import Collector from "../page/Collector";
 import Summary from "../page/Summary";
 import Report from "../page/Report";
+import Willing from "../page/Willing";
+import debug from "../page/debug";
+import PointEditor from "../page/PointEditor";
 
 interface router {
     path: string,
@@ -11,12 +14,24 @@ interface router {
 
 const routers: Array<router> = [
     {
+        path:"/willing",
+        component:Willing
+    },
+    {
         path:"/report",
         component:Report
     },
     {
+        path:"/point/edit/:pid",
+        component:PointEditor
+    },
+    {
         path:"/points/:pid",
         component:Collector
+    },
+    {
+        path:"/debug",
+        component:debug
     },
     {
         path:"/summary/points/:pid",

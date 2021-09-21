@@ -12,3 +12,7 @@ back/php/.idea/
 .DS_Store
 
 back/php/debug/
+
+src/src/page/debug.js
+
+back/php/md/
