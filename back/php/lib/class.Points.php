@@ -104,6 +104,19 @@ class Points extends Base{
         );
     }
 
+    public function getDetailWithFile(){
+        $id=$this->get['ID'] ?? 0;
+        if (!$id){
+            return self::returnActionResult([]);
+        }
+        $sql=sprintf("select * from %s where ID=%d",static::$table,$id);
+        $point=$this->pdo->getFirstRow($sql);
+        if (!$point){
+            return self::returnActionResult([]);
+        }
+
+    }
+
     public function getPointDetail($pid,$staus=''){
         if ($staus){
             $sql=sprintf("select ID,keyword,status,Point from %s where ID=%d and status in (%s) and Deleted=0",static::$table,$pid,$staus);
