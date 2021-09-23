@@ -136,9 +136,9 @@ class Points extends Base{
 
     public function getPointDetail($pid,$staus=''){
         if ($staus){
-            $sql=sprintf("select ID,keyword,status,Point from %s where ID=%d and status in (%s) and Deleted=0",static::$table,$pid,$staus);
+            $sql=sprintf("select ID,keyword,status,Point,Favourite from %s where ID=%d and status in (%s) and Deleted=0",static::$table,$pid,$staus);
         }else{
-            $sql=sprintf("select ID,keyword,status,Point from %s where ID=%d and Deleted=0;",static::$table,$pid);
+            $sql=sprintf("select ID,keyword,status,Point,Favourite from %s where ID=%d and Deleted=0;",static::$table,$pid);
         }
         return $this->pdo->getFirstRow($sql);
     }

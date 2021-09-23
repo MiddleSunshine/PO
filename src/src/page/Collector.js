@@ -2,10 +2,10 @@ import React from 'react'
 import Point from "../component/point";
 import {Card,Select,Row,Col,Button,message,Switch,Tooltip} from "antd";
 import "./../css/Collector.css"
-import {SaveOutlined,PlusCircleOutlined,DeleteOutlined,UnorderedListOutlined,FileMarkdownOutlined,SketchOutlined} from '@ant-design/icons';
+import {SaveOutlined,PlusCircleOutlined,DeleteOutlined,HeartOutlined,FileMarkdownOutlined} from '@ant-design/icons';
 import config from "../config/setting";
 import {fetch} from "whatwg-fetch";
-
+import Road from "../component/road";
 const { Option } = Select;
 
 class Collector extends React.Component{
@@ -48,10 +48,23 @@ class Collector extends React.Component{
         this.getPointsByPID=this.getPointsByPID.bind(this);
         this.getPointDetail=this.getPointDetail.bind(this);
         this.filterPoint=this.filterPoint.bind(this);
+        this.changeFavourite=this.changeFavourite.bind(this);
     }
     componentDidMount() {
         this.getPointsByPID(this.state.id);
         this.getPointDetail(this.state.id);
+    }
+    changeFavourite(index=0,addFavorite='Favourite'){
+        (async ()=>{
+            let points=this.state.points;
+            points[index].Favourite=addFavorite;
+            this.setState({
+                points:points
+            });
+            return points[index].ID ?? 0;
+        })().then((ID)=>{
+
+        })
     }
     // 初始化页面
     getPointsByPID(pid){
@@ -229,6 +242,8 @@ class Collector extends React.Component{
     render() {
         return(
             <div className="container">
+                <Road />
+                <hr/>
                 <Row>
                     <h1>keyword:{this.state.parentPoint.keyword}</h1>
                 </Row>
@@ -238,7 +253,9 @@ class Collector extends React.Component{
                     justify="start" align="top"
                 >
                     <Col span={8}>
-                        <Row>ID:{this.state.parentPoint.ID}</Row>
+                        <Row>
+                            <a href={"/point/edit/"+this.state.parentPoint.ID} target={"_blank"}>ID:{this.state.parentPoint.ID}</a>
+                        </Row>
                         <Row>Point:{this.state.parentPoint.Point}</Row>
                         <Row>Status:{this.state.parentPoint.status}</Row>
                     </Col>
@@ -330,7 +347,7 @@ class Collector extends React.Component{
                                     <Tooltip
                                         title={"open new page"}
                                     >
-                                        <span>ID:{Item.ID}</span>
+                                        <Button type={"link"}>ID:{Item.ID}</Button>
                                     </Tooltip>
                                 </Card.Grid>
                                 <Card.Grid className={"icons"}>
@@ -341,11 +358,19 @@ class Collector extends React.Component{
                                         onChange={(e)=>this.handlePointChange(e,outsideIndex)}
                                     />
                                 </Card.Grid>
-                                <Card.Grid className={"icons"}>
+                                <Card.Grid
+                                    className={"icons"}
+                                    onClick={()=>this.changeFavourite(outsideIndex,Item.Favourite===''?'Favourite':'')}
+                                >
                                     <Tooltip
-                                        title={"开发中"}
+                                        title={"Add To Favourite"}
                                     >
-                                        <SketchOutlined />
+                                        {
+                                            Item.Favourite==='Favourite'
+                                            ?<HeartOutlined style={{color:"red"}} />
+                                            :<HeartOutlined  />
+                                        }
+
                                     </Tooltip>
                                 </Card.Grid>
                                 <Card.Grid
@@ -412,8 +437,14 @@ class Collector extends React.Component{
                                     </Tooltip>
                                 </Card.Grid>
                                 <Card.Grid className={"icons"}>
-                                    <Tooltip title={"开发中"}>
-                                        <FileMarkdownOutlined />
+                                    <Tooltip title={"Open Edit Page"}>
+                                        <Button
+                                            icon={<FileMarkdownOutlined />}
+                                            type={"link"}
+                                            href={"/point/edit/"+Item.ID}
+                                            target={"_blank"}
+                                        >
+                                        </Button>
                                     </Tooltip>
                                 </Card.Grid>
                             </Card>

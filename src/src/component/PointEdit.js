@@ -1,5 +1,5 @@
 import React from "react";
-import {Form, Input, Select, Button, message, InputNumber} from "antd";
+import {Form, Input, Select, Button, message, Switch} from "antd";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import config from "../config/setting";
@@ -21,7 +21,8 @@ class PointEdit extends React.Component{
                 file:"",
                 url:"",
                 status:"new",
-                Deleted:'0'
+                Deleted:'0',
+                Favourite:false
             },
             fileContent:"",
             localFilePath:''
@@ -70,7 +71,6 @@ class PointEdit extends React.Component{
                     return false;
                 }
             }).then((saveResult)=>{
-                debugger
                 if(saveResult){
                     window.location.href=config.front_domain+"/point/edit/"+this.state.ID;
                 }
@@ -104,6 +104,37 @@ class PointEdit extends React.Component{
                         label={"Info"}
                     >
                         <Input disabled={true} value={info} />
+                    </Form.Item>
+                    <Form.Item
+                        label={"Favourite"}
+                    >
+                        {this.state.point.Favourite} /&nbsp;&nbsp;
+                        {
+                            this.state.point.Favourite==='Favourite'
+                            ?<Switch
+                                    checkedChildren={"Yes"}
+                                    unCheckedChildren={"No"}
+                                    defaultChecked
+                                    onChange={(newValue)=>{
+                                    let point=this.state.point;
+                                    point.Favourite=newValue?'Favourite':'';
+                                    this.setState({
+                                        point:point
+                                    });
+                                }}
+                                />
+                                :<Switch
+                                    checkedChildren={"Yes"}
+                                    unCheckedChildren={"No"}
+                                    onChange={(newValue)=>{
+                                    let point=this.state.point;
+                                    point.Favourite=newValue?'Favourite':'';
+                                    this.setState({
+                                        point:point
+                                    });
+                                }}
+                                />
+                        }
                     </Form.Item>
                     <Form.Item
                         label={"Keyword"}
