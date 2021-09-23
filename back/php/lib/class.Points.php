@@ -53,11 +53,21 @@ class Points extends Base{
 
     public function Search(){
         $this->post=json_decode($this->post,1);
+        if (empty($this->post['keyword'])){
+            return self::returnActionResult([]);
+        }
         $sql="select * from ".static::$table." where keyword like '%".$this->post['keyword']."%' and Deleted=0 order by ID desc;";
         return self::returnActionResult(
             $this->pdo->getRows($sql),
             true,
             $sql
+        );
+    }
+
+    public function GetFavouritePoints(){
+        $sql=sprintf("select * from %s where Favourite='%s' and Deleted=0;",static::$table,'Favourite');
+        return self::returnActionResult(
+            $this->pdo->getRows($sql)
         );
     }
 
