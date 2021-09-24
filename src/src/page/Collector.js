@@ -225,7 +225,7 @@ class Collector extends React.Component{
             message.error("Please Save First");
             return false;
         }
-        window.open(config.front_domain+"/points/"+point.ID);
+        window.open("/points/"+point.ID);
     }
     filterPoint(value){
         (async ()=>{

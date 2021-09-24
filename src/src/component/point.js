@@ -94,7 +94,7 @@ class Point extends React.Component{
             message.error("Please Save First");
             return false;
         }
-        window.open(config.front_domain+"/points/"+this.state.id);
+        window.open("/points/"+this.state.id);
     }
     switchModal(open=true){
         this.setState({

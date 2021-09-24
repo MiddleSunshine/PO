@@ -72,7 +72,7 @@ class PointEdit extends React.Component{
                 }
             }).then((saveResult)=>{
                 if(saveResult){
-                    window.location.href=config.front_domain+"/point/edit/"+this.state.ID;
+                    window.location.href="/point/edit/"+this.state.ID;
                 }
             })
         }).catch((error)=>{
