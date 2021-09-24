@@ -199,14 +199,27 @@ class Willing extends React.Component{
                                             break;
                                     }
                                     return(
-                                        <Button
-                                            type={type}
-                                            onClick={()=>{
-                                                this.updateWilling(index)
-                                            }}
-                                        >
-                                            {show}
-                                        </Button>
+                                        <div>
+                                            <Button
+                                                type={type}
+                                                onClick={()=>{
+                                                    this.updateWilling(index)
+                                                }}
+                                            >
+                                                {show}
+                                            </Button>
+                                            &nbsp;&nbsp;
+                                            <Button
+                                                type={"primary"}
+                                                danger
+                                                onClick={()=>{
+
+                                                }}
+                                            >
+                                                Delete
+                                            </Button>
+                                        </div>
+
                                     )
                                 }
                             }

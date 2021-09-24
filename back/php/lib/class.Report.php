@@ -36,7 +36,6 @@ class Report extends Base{
             $points[$outsideIndex]=[
                 'name'=>$status,
                 'type'=>'bar',
-                'stack'=>'总量',
                 'data'=>[]
             ];
             foreach ($dateRange as $index=>$date){

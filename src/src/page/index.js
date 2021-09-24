@@ -147,26 +147,29 @@ class Index extends React.Component {
                         )
                     })}
                     <hr/>
-                    <h3>Favourite Points</h3>
-                    <hr/>
-                    {
-                        this.state.favouritePoints.map((Item)=>{
-                            return(
-                                <Row>
-                                    <Col span={16}>
-                                        <Button
-                                            type={"link"}
-                                            href={"./points/"+Item.ID}
-                                            target={"_blank"}
-                                        >
-                                            {Item.status} / {Item.keyword}
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            )
-                        })
-                    }
                 </Footer>
+                <Row>
+                    <Col offset={2}>
+                        <h3>Favourite Points</h3>
+                    </Col>
+                </Row>
+                {
+                    this.state.favouritePoints.map((Item)=>{
+                        return(
+                            <Row>
+                                <Col offset={2} span={16}>
+                                    <Button
+                                        type={"link"}
+                                        href={"./points/"+Item.ID}
+                                        target={"_blank"}
+                                    >
+                                        {Item.status} / {Item.keyword}
+                                    </Button>
+                                </Col>
+                            </Row>
+                        )
+                    })
+                }
             </Layout>
         );
     }

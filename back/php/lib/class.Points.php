@@ -65,7 +65,7 @@ class Points extends Base{
     }
 
     public function GetFavouritePoints(){
-        $sql=sprintf("select * from %s where Favourite='%s' and Deleted=0;",static::$table,'Favourite');
+        $sql=sprintf("select * from %s where Favourite='%s' and Deleted=0 order by ID desc;",static::$table,'Favourite');
         return self::returnActionResult(
             $this->pdo->getRows($sql)
         );

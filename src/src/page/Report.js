@@ -2,7 +2,7 @@ import React from "react";
 import ReactECharts from "echarts-for-react";
 import config from "../config/setting";
 import { DatePicker,Button } from 'antd';
-
+import Road from "../component/road";
 
 class Report extends React.Component{
     constructor(props) {
@@ -74,6 +74,8 @@ class Report extends React.Component{
         };
         return(
             <div className="container">
+                <Road />
+                <hr/>
                 <div className="row">
                     <DatePicker.RangePicker
                         format="YYYY-MM-DD"

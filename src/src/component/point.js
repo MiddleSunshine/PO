@@ -1,5 +1,5 @@
 import React from 'react'
-import {Card,Row,Col,Tooltip,message,Modal} from "antd";
+import {Card,Row,Col,Tooltip,message,Modal,Input} from "antd";
 import {SaveOutlined,DeleteOutlined } from '@ant-design/icons';
 import config from "../config/setting";
 import {fetch} from "whatwg-fetch";
@@ -167,7 +167,8 @@ class Point extends React.Component{
                     <Row justify="space-around" align="middle">
                         <Col span={4}>Point</Col>
                         <Col span={20}>
-                            <input
+                            <Input
+                                style={{width:"80%"}}
                                 onChange={(e)=>{
                                     let newValue=e.target.value;
                                     if(!newValue){
