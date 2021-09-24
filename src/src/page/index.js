@@ -1,5 +1,5 @@
 import React from 'react'
-import {Layout, Row, Col, Button} from "antd";
+import {Layout, Row, Col, Button,message} from "antd";
 import "../css/index.css"
 import {DingdingOutlined} from '@ant-design/icons';
 import config from "../config/setting";
@@ -11,9 +11,11 @@ class Index extends React.Component {
         super(props);
         this.state={
             points:[],
-            searchKeyWord:''
+            searchKeyWord:'',
+            favouritePoints:[]
         }
         this.searchPoints=this.searchPoints.bind(this);
+        this.getFavourite=this.getFavourite.bind(this);
     }
     searchPoints(){
         fetch(config.back_domain+"/index.php?action=Points&method=Search",{
@@ -27,10 +29,27 @@ class Index extends React.Component {
                 res.json().then((json)=>{
                     this.setState({
                         points:json.Data
+                    });
+                    return json.Data.length;
+                }).then((amount)=>{
+                    message.success("Search Amount:"+amount)
+                })
+            })
+    }
+    getFavourite(){
+        fetch(config.back_domain+"/index.php?action=Points&method=GetFavouritePoints")
+            .then((res)=>{
+                res.json().then((json)=>{
+                    this.setState({
+                        favouritePoints:json.Data
                     })
                 })
             })
     }
+    componentDidMount() {
+        this.getFavourite();
+    }
+
     render() {
         return (
             <Layout className={"po_index"}>
@@ -127,6 +146,26 @@ class Index extends React.Component {
                             </Row>
                         )
                     })}
+                    <hr/>
+                    <h3>Favourite Points</h3>
+                    <hr/>
+                    {
+                        this.state.favouritePoints.map((Item)=>{
+                            return(
+                                <Row>
+                                    <Col span={16}>
+                                        <Button
+                                            type={"link"}
+                                            href={"./points/"+Item.ID}
+                                            target={"_blank"}
+                                        >
+                                            {Item.status} / {Item.keyword}
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            )
+                        })
+                    }
                 </Footer>
             </Layout>
         );

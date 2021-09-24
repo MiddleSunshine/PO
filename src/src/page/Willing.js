@@ -3,6 +3,7 @@ import config from "../config/setting";
 import {Table, Layout, Row, Col, Button,Modal,Tag} from 'antd'
 import {SketchOutlined} from '@ant-design/icons'
 import WillingDetail from "../component/WillingDetail";
+import Road from "../component/road";
 
 const {Header, Footer,Content} = Layout;
 
@@ -54,7 +55,7 @@ class Willing extends React.Component{
                 res.json().then((json)=>{
                     this.setState({
                         data:json.Data.Points,
-                        newAmount:json.Data.amount.new,
+                        newAmount:json.Data.amount.Point,
                         exchangedAmount:json.Data.amount.exchanged
                     })
                 })
@@ -74,6 +75,10 @@ class Willing extends React.Component{
                     </Row>
                 </Header>
                 <Content style={{paddingLeft:"15px",paddingRight:"15px"}}>
+                    <Row>
+                        <Road />
+                    </Row>
+                    <hr/>
                     <Row>
                         <Col span={4}>
                             <Button

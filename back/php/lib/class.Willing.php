@@ -17,6 +17,9 @@ class Willing extends Base{
             $amount=$this->pdo->getFirstRow($sql);
             $returnData['Data']['amount'][$status]=$amount[$status];
         }
+        $sql=sprintf("select sum(Point) as Point from %s where status in (%s)",Points::$table,"'".Points::STATUS_SOLVED."','".Points::STATUS_ARCHIVED."'");
+        $amount=$this->pdo->getFirstRow($sql);
+        $returnData['Data']['amount']['Point']=(($amount['Point'] ?? 0)-$returnData['Data']['amount'][self::STATUS_EXCHANGED]);
         return $returnData;
     }
 
