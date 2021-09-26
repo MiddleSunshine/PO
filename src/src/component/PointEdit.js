@@ -39,7 +39,7 @@ class PointEdit extends React.Component{
     }
 
     getPointDetail(ID){
-        requestApi("/index.php?action=Points&method=GetDetailWithFile&ID="+ID)
+        requestApi("/poWork.php?action=Points&method=GetDetailWithFile&ID="+ID)
             .then((res)=>{
                 res.json().then((json)=>{
                     this.setState({
@@ -52,7 +52,7 @@ class PointEdit extends React.Component{
     }
 
     savePoint(){
-        requestApi("/index.php?action=Points&method=SaveWithFile",{
+        requestApi("/poWork.php?action=Points&method=SaveWithFile",{
             mode:"cors",
             method:"post",
             body:JSON.stringify({

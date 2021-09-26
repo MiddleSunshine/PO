@@ -68,7 +68,7 @@ class Collector extends React.Component{
     }
     // 初始化页面
     getPointsByPID(pid){
-        requestApi("/index.php?action=Points&method=Index&id="+pid,{
+        requestApi("/poWork.php?action=Points&method=Index&id="+pid,{
             method:"post",
             mode:"cors",
             body:JSON.stringify({
@@ -85,7 +85,7 @@ class Collector extends React.Component{
     }
     getPointDetail(id){
         if (id){
-            requestApi("/index.php?action=Points&method=GetAPoint&id="+id)
+            requestApi("/poWork.php?action=Points&method=GetAPoint&id="+id)
                 .then((res)=>{
                     res.json().then((json)=>{
                         this.setState({
@@ -169,7 +169,7 @@ class Collector extends React.Component{
             point.status='new';
         }
         requestApi(
-            "/index.php?action=Points&method=Save",
+            "/poWork.php?action=Points&method=Save",
             {
                 method:"post",
                 mode:"cors",

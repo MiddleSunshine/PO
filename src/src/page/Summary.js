@@ -25,7 +25,7 @@ class Summary extends React.Component{
     }
 
     getData(pid){
-        return requestApi("/index.php?action=Summary&method=Index2&pid="+pid)
+        return requestApi("/poWork.php?action=Summary&method=Index2&pid="+pid)
             .then((res)=>{
                 res.json().then((json)=>{
                     let data=json.Data.point;

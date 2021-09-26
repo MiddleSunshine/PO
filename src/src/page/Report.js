@@ -21,7 +21,7 @@ class Report extends React.Component{
     }
 
     getData(){
-        requestApi("/index.php?action=Report&method=Index",{
+        requestApi("/poWork.php?action=Report&method=Index",{
             mode:"cors",
             method:"post",
             body:JSON.stringify({

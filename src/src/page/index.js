@@ -18,7 +18,7 @@ class Index extends React.Component {
         this.getFavourite=this.getFavourite.bind(this);
     }
     searchPoints(){
-        requestApi('/index.php?action=Points&method=Search',
+        requestApi('/poWork.php?action=Points&method=Search',
             {
                 method:"post",
                 mode:"cors",
@@ -38,7 +38,7 @@ class Index extends React.Component {
             })
     }
     getFavourite(){
-        requestApi("/index.php?action=Points&method=GetFavouritePoints")
+        requestApi("/poWork.php?action=Points&method=GetFavouritePoints")
             .then((res)=>{
                 res.json().then((json)=>{
                     this.setState({

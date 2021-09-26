@@ -50,7 +50,7 @@ class Point extends React.Component{
             Deleted:deleted,
             Point:this.state.point
         };
-        requestApi("/index.php?action=Points&method=Save",
+        requestApi("/poWork.php?action=Points&method=Save",
             {
                 method:"post",
                 mode:"cors",
@@ -77,7 +77,7 @@ class Point extends React.Component{
         })
     }
     getPoint(id){
-        requestApi("/index.php?action=Points&method=GetAPoint&id="+id)
+        requestApi("/poWork.php?action=Points&method=GetAPoint&id="+id)
             .then((res)=>{
             res.json().then((json)=>{
                 this.setState({

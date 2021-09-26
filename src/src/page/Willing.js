@@ -51,7 +51,7 @@ class Willing extends React.Component{
     }
 
     getWillingList(){
-        requestApi("/index.php?action=Willing&method=list")
+        requestApi("/poWork.php?action=Willing&method=list")
             .then((res)=>{
                 res.json().then((json)=>{
                     this.setState({
