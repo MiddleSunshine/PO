@@ -3,6 +3,7 @@ import {Layout, Row, Col, Button, message, Input} from "antd";
 import "../css/index.css"
 import {DingdingOutlined} from '@ant-design/icons';
 import {requestApi} from "../config/functions";
+import Welcome from "../component/Welcome";
 
 const {Header, Footer, Content} = Layout;
 
@@ -173,6 +174,9 @@ class Index extends React.Component {
                         )
                     })
                 }
+                <Row>
+                    <Welcome />
+                </Row>
             </Layout>
         );
     }

@@ -1,6 +1,8 @@
 <?php
 
 class Points extends Base{
+    public static $autoSendPointKeyWord="连续登陆：自动赠送积分";
+
     public static $table="Points";
 
     const STATUS_NEW='new';
@@ -151,5 +153,45 @@ class Points extends Base{
             $sql=sprintf("select ID,keyword,status,Point,Favourite from %s where ID=%d and Deleted=0;",static::$table,$pid);
         }
         return $this->pdo->getFirstRow($sql);
+    }
+
+    public function AutoSend(){
+        // 判断今天是否已经领取过积分了
+        $todayKey=self::getKeywordName(date("Y-m-d"));
+        $sql=sprintf(
+            "select * from %s where Keyword='%s'",
+            Points::$table,
+            $todayKey
+        );
+        $today=$this->pdo->getFirstRow($sql);
+        if ($today){
+            return self::returnActionResult([],false,"今天已经领取过积分了");
+        }
+        // 检查昨天是否也领取过积分
+        $sql=sprintf(
+            "select * from %s where keyword='%s'",
+            Points::$table,
+            self::getKeywordName(date("Y-m-d",strtotime("-1")))
+        );
+        $yesterday=$this->pdo->getFirstRow($sql);
+        $point=10;
+        if ($yesterday){
+            $point+=$yesterday['Point'];
+        }
+        $this->post=json_encode([
+            'point'=>[
+                'keyword'=>$todayKey,
+                'status'=>self::STATUS_ARCHIVED,
+                'Point'=>$point
+            ]
+        ]);
+        $this->Save(false);
+        return self::returnActionResult([
+            'Point'=>$point
+        ]);
+    }
+
+    public static function getKeywordName($date){
+        return static::$autoSendPointKeyWord." @ ".$date;
     }
 }

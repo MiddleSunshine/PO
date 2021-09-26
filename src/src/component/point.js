@@ -1,6 +1,6 @@
 import React from 'react'
 import {Card,Row,Col,Tooltip,message,Modal,Input} from "antd";
-import {SaveOutlined,DeleteOutlined } from '@ant-design/icons';
+import {SaveOutlined,DeleteOutlined,EditOutlined,RightOutlined } from '@ant-design/icons';
 import config from "../config/setting";
 import {requestApi} from "../config/functions";
 class Point extends React.Component{
@@ -132,13 +132,21 @@ class Point extends React.Component{
                         />
                     </Col>
                     <Col
-                        span={2}
+                        span={1}
                         className={"icons"}
                         onClick={()=>this.savePoint()}
                     >
                         <SaveOutlined/>
                     </Col>
-                    <Col span={2} className={"icons"}>
+                    <Col
+                        span={1}
+                        className={"icons"}
+                    >
+                        <a href={"/point/edit/"+this.state.id} target={"_blank"}>
+                            <EditOutlined />
+                        </a>
+                    </Col>
+                    <Col span={1} className={"icons"}>
                         <DeleteOutlined
                             onClick={()=>this.deleteThis()}
                         />
@@ -147,9 +155,9 @@ class Point extends React.Component{
                          onClick={()=>this.openNewPage()}
                     >
                         <Tooltip
-                            title={"Open New Page"}
+                            title={"ID : "+this.state.id}
                         >
-                            {this.state.id}
+                            <RightOutlined />
                         </Tooltip>
                     </Col>
                 </Row>

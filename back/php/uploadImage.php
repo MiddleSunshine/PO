@@ -1,5 +1,7 @@
 <?php
 
+echo 1;
+return false;
 $tmp = $_FILES['myfile']['tmp_name'];
 
 $filepath = __DIR__.DIRECTORY_SEPARATOR.'photo'.DIRECTORY_SEPARATOR;

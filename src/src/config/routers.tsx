@@ -4,7 +4,7 @@ import Summary from "../page/Summary";
 import Report from "../page/Report";
 import Willing from "../page/Willing";
 import PointEditor from "../page/PointEditor";
-
+import Image from "../page/Image";
 interface router {
     path: string,
     component: any,
@@ -12,6 +12,10 @@ interface router {
 }
 
 const routers: Array<router> = [
+    {
+        path:"/image",
+        component:Image
+    },
     {
         path:"/willing",
         component:Willing
