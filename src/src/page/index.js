@@ -1,8 +1,7 @@
 import React from 'react'
-import {Layout, Row, Col, Button,message} from "antd";
+import {Layout, Row, Col, Button, message, Input} from "antd";
 import "../css/index.css"
 import {DingdingOutlined} from '@ant-design/icons';
-import config from "../config/setting";
 import {requestApi} from "../config/functions";
 
 const {Header, Footer, Content} = Layout;
@@ -63,7 +62,9 @@ class Index extends React.Component {
                                     <h1><DingdingOutlined/></h1>
                                 </Col>
                                 <Col span={23}>
-                                    <h1 style={{lineHeight: "64px"}}>Remember Why You Start</h1>
+                                    <h1 style={{lineHeight: "64px"}}>
+                                        Remember Why You Start
+                                    </h1>
                                 </Col>
                             </Row>
                         </Col>
