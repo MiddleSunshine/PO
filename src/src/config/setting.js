@@ -1,6 +1,7 @@
 var config = {
     front_domain:'http://localhost:3000',
     back_domain: 'http://localhost:8091',
+    back_domain_key:'domain',
     common_road: [
     ],
     statusMap:[

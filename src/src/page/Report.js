@@ -3,6 +3,7 @@ import ReactECharts from "echarts-for-react";
 import config from "../config/setting";
 import { DatePicker,Button } from 'antd';
 import Road from "../component/road";
+import {requestApi} from "../config/functions";
 
 class Report extends React.Component{
     constructor(props) {
@@ -20,7 +21,7 @@ class Report extends React.Component{
     }
 
     getData(){
-        fetch(config.back_domain+"/index.php?action=Report&method=Index",{
+        requestApi("/index.php?action=Report&method=Index",{
             mode:"cors",
             method:"post",
             body:JSON.stringify({

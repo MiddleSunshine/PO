@@ -3,6 +3,7 @@ import {Layout, Row, Col, Button,message} from "antd";
 import "../css/index.css"
 import {DingdingOutlined} from '@ant-design/icons';
 import config from "../config/setting";
+import {requestApi} from "../config/functions";
 
 const {Header, Footer, Content} = Layout;
 
@@ -18,13 +19,14 @@ class Index extends React.Component {
         this.getFavourite=this.getFavourite.bind(this);
     }
     searchPoints(){
-        fetch(config.back_domain+"/index.php?action=Points&method=Search",{
-            method:"post",
-            mode:"cors",
-            body:JSON.stringify({
-                keyword:this.state.searchKeyWord
+        requestApi('/index.php?action=Points&method=Search',
+            {
+                method:"post",
+                mode:"cors",
+                body:JSON.stringify({
+                    keyword:this.state.searchKeyWord
+                })
             })
-        })
             .then((res)=>{
                 res.json().then((json)=>{
                     this.setState({
@@ -37,7 +39,7 @@ class Index extends React.Component {
             })
     }
     getFavourite(){
-        fetch(config.back_domain+"/index.php?action=Points&method=GetFavouritePoints")
+        requestApi("/index.php?action=Points&method=GetFavouritePoints")
             .then((res)=>{
                 res.json().then((json)=>{
                     this.setState({

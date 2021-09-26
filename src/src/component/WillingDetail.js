@@ -1,6 +1,7 @@
 import React from "react";
 import {Form, Input, Button, Select, message} from 'antd'
 import config from "../config/setting";
+import {requestApi} from "../config/functions";
 
 const {Option}=Select;
 
@@ -37,7 +38,7 @@ class WillingDetail extends React.Component{
     }
 
     getWillingDetail(ID){
-        fetch(config.back_domain+"/index.php?action=Willing&method=Detail&id="+ID)
+        requestApi("/index.php?action=Willing&method=Detail&id="+ID)
             .then((res)=>{
                 res.json().then((json)=>{
                     this.setState({
@@ -52,7 +53,7 @@ class WillingDetail extends React.Component{
     }
 
     saveWilling(){
-        fetch(config.back_domain+"/index.php?action=Willing&method=Save",{
+        requestApi("/index.php?action=Willing&method=Save",{
             method:"post",
             mode:"cors",
             body:JSON.stringify({

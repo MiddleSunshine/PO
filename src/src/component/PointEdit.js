@@ -3,6 +3,7 @@ import {Form, Input, Select, Button, message, Switch} from "antd";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import config from "../config/setting";
+import {requestApi} from "../config/functions";
 const {Option}=Select;
 
 // markdown 插件仓库位置
@@ -38,7 +39,7 @@ class PointEdit extends React.Component{
     }
 
     getPointDetail(ID){
-        fetch(config.back_domain+"/index.php?action=Points&method=GetDetailWithFile&ID="+ID)
+        requestApi("/index.php?action=Points&method=GetDetailWithFile&ID="+ID)
             .then((res)=>{
                 res.json().then((json)=>{
                     this.setState({
@@ -51,7 +52,7 @@ class PointEdit extends React.Component{
     }
 
     savePoint(){
-        fetch(config.back_domain+"/index.php?action=Points&method=SaveWithFile",{
+        requestApi("/index.php?action=Points&method=SaveWithFile",{
             mode:"cors",
             method:"post",
             body:JSON.stringify({

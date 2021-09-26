@@ -2,7 +2,7 @@ import React from 'react'
 import {Card,Row,Col,Tooltip,message,Modal,Input} from "antd";
 import {SaveOutlined,DeleteOutlined } from '@ant-design/icons';
 import config from "../config/setting";
-import {fetch} from "whatwg-fetch";
+import {requestApi} from "../config/functions";
 class Point extends React.Component{
     constructor(props) {
         super(props);
@@ -50,7 +50,7 @@ class Point extends React.Component{
             Deleted:deleted,
             Point:this.state.point
         };
-        fetch(config.back_domain+"/index.php?action=Points&method=Save",
+        requestApi("/index.php?action=Points&method=Save",
             {
                 method:"post",
                 mode:"cors",
@@ -77,7 +77,7 @@ class Point extends React.Component{
         })
     }
     getPoint(id){
-        fetch(config.back_domain+"/index.php?action=Points&method=GetAPoint&id="+id)
+        requestApi("/index.php?action=Points&method=GetAPoint&id="+id)
             .then((res)=>{
             res.json().then((json)=>{
                 this.setState({
