@@ -1,3 +1,3 @@
-function sleep(time){
-    return new Promise(resolve => setTimeout(resolve,time));
+export function requestApi(api,option={}){
+    return fetch("http://"+document.domain+":8091"+api,option);
 }

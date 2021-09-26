@@ -36,7 +36,6 @@ class Report extends Base{
             $points[$outsideIndex]=[
                 'name'=>$status,
                 'type'=>'bar',
-                'stack'=>'总量',
                 'data'=>[]
             ];
             foreach ($dateRange as $index=>$date){
@@ -52,5 +51,18 @@ class Report extends Base{
             'endTime'=>$endTime,
             'post'=>$this->post
         ]);
+    }
+
+    public function GetPercent(){
+        $sql=sprintf("select count(*) as number,status from %s where Deleted=0 group by status;",Points::$table);
+        $count=$this->pdo->getRows($sql);
+        $returnData=[];
+        foreach ($count as $value){
+            $returnData[]=[
+                'value'=>intval($value['number']),
+                'name'=>$value['status']
+            ];
+        }
+        return self::returnActionResult($returnData);
     }
 }

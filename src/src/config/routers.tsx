@@ -3,9 +3,8 @@ import Collector from "../page/Collector";
 import Summary from "../page/Summary";
 import Report from "../page/Report";
 import Willing from "../page/Willing";
-import debug from "../page/debug";
 import PointEditor from "../page/PointEditor";
-
+import Image from "../page/Image";
 interface router {
     path: string,
     component: any,
@@ -13,6 +12,10 @@ interface router {
 }
 
 const routers: Array<router> = [
+    {
+        path:"/image",
+        component:Image
+    },
     {
         path:"/willing",
         component:Willing
@@ -28,10 +31,6 @@ const routers: Array<router> = [
     {
         path:"/points/:pid",
         component:Collector
-    },
-    {
-        path:"/debug",
-        component:debug
     },
     {
         path:"/summary/points/:pid",

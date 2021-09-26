@@ -1,8 +1,8 @@
 import React from 'react'
-import {Card,Row,Col,Tooltip,message,Modal} from "antd";
-import {SaveOutlined,DeleteOutlined } from '@ant-design/icons';
+import {Card,Row,Col,Tooltip,message,Modal,Input} from "antd";
+import {SaveOutlined,DeleteOutlined,EditOutlined,RightOutlined } from '@ant-design/icons';
 import config from "../config/setting";
-import {fetch} from "whatwg-fetch";
+import {requestApi} from "../config/functions";
 class Point extends React.Component{
     constructor(props) {
         super(props);
@@ -50,7 +50,7 @@ class Point extends React.Component{
             Deleted:deleted,
             Point:this.state.point
         };
-        fetch(config.back_domain+"/index.php?action=Points&method=Save",
+        requestApi("/index.php?action=Points&method=Save",
             {
                 method:"post",
                 mode:"cors",
@@ -77,7 +77,7 @@ class Point extends React.Component{
         })
     }
     getPoint(id){
-        fetch(config.back_domain+"/index.php?action=Points&method=GetAPoint&id="+id)
+        requestApi("/index.php?action=Points&method=GetAPoint&id="+id)
             .then((res)=>{
             res.json().then((json)=>{
                 this.setState({
@@ -132,13 +132,21 @@ class Point extends React.Component{
                         />
                     </Col>
                     <Col
-                        span={2}
+                        span={1}
                         className={"icons"}
                         onClick={()=>this.savePoint()}
                     >
                         <SaveOutlined/>
                     </Col>
-                    <Col span={2} className={"icons"}>
+                    <Col
+                        span={1}
+                        className={"icons"}
+                    >
+                        <a href={"/point/edit/"+this.state.id} target={"_blank"}>
+                            <EditOutlined />
+                        </a>
+                    </Col>
+                    <Col span={1} className={"icons"}>
                         <DeleteOutlined
                             onClick={()=>this.deleteThis()}
                         />
@@ -147,9 +155,9 @@ class Point extends React.Component{
                          onClick={()=>this.openNewPage()}
                     >
                         <Tooltip
-                            title={"Open New Page"}
+                            title={"ID : "+this.state.id}
                         >
-                            {this.state.id}
+                            <RightOutlined />
                         </Tooltip>
                     </Col>
                 </Row>
@@ -167,7 +175,8 @@ class Point extends React.Component{
                     <Row justify="space-around" align="middle">
                         <Col span={4}>Point</Col>
                         <Col span={20}>
-                            <input
+                            <Input
+                                style={{width:"80%"}}
                                 onChange={(e)=>{
                                     let newValue=e.target.value;
                                     if(!newValue){

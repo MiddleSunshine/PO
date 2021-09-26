@@ -1,8 +1,9 @@
 import React from 'react'
-import {Layout, Row, Col, Button,message} from "antd";
+import {Layout, Row, Col, Button, message, Input} from "antd";
 import "../css/index.css"
 import {DingdingOutlined} from '@ant-design/icons';
-import config from "../config/setting";
+import {requestApi} from "../config/functions";
+import Welcome from "../component/Welcome";
 
 const {Header, Footer, Content} = Layout;
 
@@ -18,13 +19,14 @@ class Index extends React.Component {
         this.getFavourite=this.getFavourite.bind(this);
     }
     searchPoints(){
-        fetch(config.back_domain+"/index.php?action=Points&method=Search",{
-            method:"post",
-            mode:"cors",
-            body:JSON.stringify({
-                keyword:this.state.searchKeyWord
+        requestApi('/index.php?action=Points&method=Search',
+            {
+                method:"post",
+                mode:"cors",
+                body:JSON.stringify({
+                    keyword:this.state.searchKeyWord
+                })
             })
-        })
             .then((res)=>{
                 res.json().then((json)=>{
                     this.setState({
@@ -37,7 +39,7 @@ class Index extends React.Component {
             })
     }
     getFavourite(){
-        fetch(config.back_domain+"/index.php?action=Points&method=GetFavouritePoints")
+        requestApi("/index.php?action=Points&method=GetFavouritePoints")
             .then((res)=>{
                 res.json().then((json)=>{
                     this.setState({
@@ -61,7 +63,9 @@ class Index extends React.Component {
                                     <h1><DingdingOutlined/></h1>
                                 </Col>
                                 <Col span={23}>
-                                    <h1 style={{lineHeight: "64px"}}>Remember Why You Start</h1>
+                                    <h1 style={{lineHeight: "64px"}}>
+                                        Remember Why You Start
+                                    </h1>
                                 </Col>
                             </Row>
                         </Col>
@@ -147,26 +151,32 @@ class Index extends React.Component {
                         )
                     })}
                     <hr/>
-                    <h3>Favourite Points</h3>
-                    <hr/>
-                    {
-                        this.state.favouritePoints.map((Item)=>{
-                            return(
-                                <Row>
-                                    <Col span={16}>
-                                        <Button
-                                            type={"link"}
-                                            href={"./points/"+Item.ID}
-                                            target={"_blank"}
-                                        >
-                                            {Item.status} / {Item.keyword}
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            )
-                        })
-                    }
                 </Footer>
+                <Row>
+                    <Col offset={2}>
+                        <h3>Favourite Points</h3>
+                    </Col>
+                </Row>
+                {
+                    this.state.favouritePoints.map((Item)=>{
+                        return(
+                            <Row>
+                                <Col offset={2} span={16}>
+                                    <Button
+                                        type={"link"}
+                                        href={"./points/"+Item.ID}
+                                        target={"_blank"}
+                                    >
+                                        {Item.status} / {Item.keyword}
+                                    </Button>
+                                </Col>
+                            </Row>
+                        )
+                    })
+                }
+                <Row>
+                    <Welcome />
+                </Row>
             </Layout>
         );
     }

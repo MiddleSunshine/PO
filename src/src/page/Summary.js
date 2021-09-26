@@ -1,6 +1,7 @@
 import React from "react";
 import config from "../config/setting";
 import ReactECharts from 'echarts-for-react';
+import {requestApi} from "../config/functions";
 
 /**
  * echart文档演示
@@ -24,7 +25,7 @@ class Summary extends React.Component{
     }
 
     getData(pid){
-        return fetch(config.back_domain+"/index.php?action=Summary&method=Index2&pid="+pid)
+        return requestApi("/index.php?action=Summary&method=Index2&pid="+pid)
             .then((res)=>{
                 res.json().then((json)=>{
                     let data=json.Data.point;

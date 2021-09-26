@@ -4,6 +4,7 @@ import {Table, Layout, Row, Col, Button,Modal,Tag} from 'antd'
 import {SketchOutlined} from '@ant-design/icons'
 import WillingDetail from "../component/WillingDetail";
 import Road from "../component/road";
+import {requestApi} from "../config/functions";
 
 const {Header, Footer,Content} = Layout;
 
@@ -50,7 +51,7 @@ class Willing extends React.Component{
     }
 
     getWillingList(){
-        fetch(config.back_domain+"/index.php?action=Willing&method=list")
+        requestApi("/index.php?action=Willing&method=list")
             .then((res)=>{
                 res.json().then((json)=>{
                     this.setState({
@@ -199,14 +200,27 @@ class Willing extends React.Component{
                                             break;
                                     }
                                     return(
-                                        <Button
-                                            type={type}
-                                            onClick={()=>{
-                                                this.updateWilling(index)
-                                            }}
-                                        >
-                                            {show}
-                                        </Button>
+                                        <div>
+                                            <Button
+                                                type={type}
+                                                onClick={()=>{
+                                                    this.updateWilling(index)
+                                                }}
+                                            >
+                                                {show}
+                                            </Button>
+                                            &nbsp;&nbsp;
+                                            <Button
+                                                type={"primary"}
+                                                danger
+                                                onClick={()=>{
+
+                                                }}
+                                            >
+                                                Delete
+                                            </Button>
+                                        </div>
+
                                     )
                                 }
                             }

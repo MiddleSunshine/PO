@@ -4,8 +4,8 @@ import {Card,Select,Row,Col,Button,message,Switch,Tooltip} from "antd";
 import "./../css/Collector.css"
 import {SaveOutlined,PlusCircleOutlined,DeleteOutlined,HeartOutlined,FileMarkdownOutlined} from '@ant-design/icons';
 import config from "../config/setting";
-import {fetch} from "whatwg-fetch";
 import Road from "../component/road";
+import {requestApi} from "../config/functions";
 const { Option } = Select;
 
 class Collector extends React.Component{
@@ -68,7 +68,7 @@ class Collector extends React.Component{
     }
     // 初始化页面
     getPointsByPID(pid){
-        fetch(config.back_domain+"/index.php?action=Points&method=Index&id="+pid,{
+        requestApi("/index.php?action=Points&method=Index&id="+pid,{
             method:"post",
             mode:"cors",
             body:JSON.stringify({
@@ -85,7 +85,7 @@ class Collector extends React.Component{
     }
     getPointDetail(id){
         if (id){
-            fetch(config.back_domain+"/index.php?action=Points&method=GetAPoint&id="+id)
+            requestApi("/index.php?action=Points&method=GetAPoint&id="+id)
                 .then((res)=>{
                     res.json().then((json)=>{
                         this.setState({
@@ -168,8 +168,8 @@ class Collector extends React.Component{
         if (point.status==='init'){
             point.status='new';
         }
-        fetch(
-            config.back_domain+"/index.php?action=Points&method=Save",
+        requestApi(
+            "/index.php?action=Points&method=Save",
             {
                 method:"post",
                 mode:"cors",
