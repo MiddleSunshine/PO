@@ -4,6 +4,8 @@ import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import config from "../config/setting";
 import {requestApi} from "../config/functions";
+import MarkdownPreview from '@uiw/react-markdown-preview';
+
 const {Option}=Select;
 
 // markdown 插件仓库位置
@@ -26,7 +28,8 @@ class PointEdit extends React.Component{
                 Favourite:false
             },
             fileContent:"",
-            localFilePath:''
+            localFilePath:'',
+            editFile:false
         }
         this.getPointDetail=this.getPointDetail.bind(this);
         this.handleChange=this.handleChange.bind(this);
@@ -212,16 +215,35 @@ class PointEdit extends React.Component{
                         />
                     </Form.Item>
                     <Form.Item
-                        label={"File Content"}
+                        label={<Button
+                                type={"primary"}
+                                onClick={()=>{
+                                    this.setState({
+                                        editFile:!this.state.editFile
+                                    })
+                                }}
+                            >
+                            {
+                                this.state.editFile
+                                    ?"Save File"
+                                    :"Edit File"
+                            }
+                        </Button>}
                     >
-                        <SimpleMDE
-                            value={this.state.fileContent}
-                            onChange={(value)=>{
-                                this.setState({
-                                    fileContent:value
-                                })
-                            }}
-                        />
+                        {
+                            this.state.editFile
+                                ?<SimpleMDE
+                                    value={this.state.fileContent}
+                                    onChange={(value)=>{
+                                        this.setState({
+                                            fileContent:value
+                                        })
+                                    }}
+                                />
+                                :<MarkdownPreview
+                                    source={this.state.fileContent}
+                                />
+                        }
                     </Form.Item>
                     <Form.Item
                         label={"Option"}
