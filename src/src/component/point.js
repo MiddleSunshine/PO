@@ -3,6 +3,9 @@ import {Card,Row,Col,Tooltip,message,Modal,Input} from "antd";
 import {SaveOutlined,DeleteOutlined,EditOutlined,RightOutlined } from '@ant-design/icons';
 import config from "../config/setting";
 import {requestApi} from "../config/functions";
+
+const {confirm}=Modal;
+
 class Point extends React.Component{
     constructor(props) {
         super(props);
@@ -39,7 +42,7 @@ class Point extends React.Component{
             hidden:true
         });
     }
-    savePoint(deleted=0){
+    savePoint(deleted=0,forceUpdate=false){
         if (!this.state.pid){
             message.error("Save Parent Point First!");
             return false;
@@ -56,12 +59,19 @@ class Point extends React.Component{
                 mode:"cors",
                 body:JSON.stringify({
                     point:point,
-                    PID:this.state.pid
+                    PID:this.state.pid,
+                    forceUpdate:forceUpdate
                 })
             }).then((res)=>{
                 res.json().then((json)=>{
                     if(!json.Status){
-                        message.error(json.Message);
+                        confirm({
+                            title: "Point Exists",
+                            content:<a href={"/point/edit/"+json.Data.LastID} target={"_blank"}>
+                                Check Detail : ID:{json.Data.LastID}
+                            </a>,
+                            onOk:()=>this.savePoint(deleted,true)
+                        })
                     }else{
                         this.setState({
                             id:json.Data.ID,

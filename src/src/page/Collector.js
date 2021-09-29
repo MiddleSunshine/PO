@@ -1,12 +1,13 @@
 import React from 'react'
 import Point from "../component/point";
-import {Card,Select,Row,Col,Button,message,Switch,Tooltip} from "antd";
+import {Card,Select,Row,Col,Button,message,Switch,Tooltip,Modal} from "antd";
 import "./../css/Collector.css"
 import {SaveOutlined,PlusCircleOutlined,DeleteOutlined,HeartOutlined,FileMarkdownOutlined} from '@ant-design/icons';
 import config from "../config/setting";
 import Road from "../component/road";
 import {requestApi} from "../config/functions";
 const { Option } = Select;
+const { confirm } = Modal;
 
 class Collector extends React.Component{
     constructor(props) {
@@ -163,7 +164,7 @@ class Collector extends React.Component{
         });
     }
     // 保存效果
-    savePoint(index){
+    savePoint(index,forceUpdate=false){
         let point=this.state.points[index];
         if (point.status==='init'){
             point.status='new';
@@ -175,15 +176,21 @@ class Collector extends React.Component{
                 mode:"cors",
                 body:JSON.stringify({
                     point,
-                    PID:this.state.id
+                    PID:this.state.id,
+                    forceUpdate:forceUpdate
                 })
             }
         )
             .then((res)=>{
                 res.json().then((json)=>{
                     if (!json.Status){
-                        message.error(json.Message);
-                        return false;
+                        confirm({
+                            title: "Point Exists",
+                            content:<a href={"/point/edit/"+json.Data.LastID} target={"_blank"}>
+                                Check Detail : ID:{json.Data.LastID}
+                            </a>,
+                            onOk:()=>this.savePoint(index,true)
+                        })
                     }else{
                         point.ID=json.Data.ID;
                         let points=this.state.points;

@@ -76,6 +76,7 @@ class Points extends Base{
     public function Save($checkPid=true){
         $postData=json_decode($this->post,1);
         $point=$postData['point'];
+        $forceUpdate=$postData['forceUpdate'] ?? true;
         if (empty($point['keyword'])){
             return self::returnActionResult([],false,"keyword不能为空");
         }
@@ -88,6 +89,13 @@ class Points extends Base{
             $this->handleSql($point,$point['ID'],'keyword');
         }else{
             unset($point['ID']);
+            $sql=sprintf("select ID from %s where keyword='%s';",self::$table,$point['keyword']);
+            $lastPoint=$this->pdo->getFirstRow($sql);
+            if ($lastPoint && !$forceUpdate){
+                return self::returnActionResult([
+                    'LastID'=>$lastPoint['ID']
+                ],false,"该值已存在，ID：".$lastPoint['ID']);
+            }
             // insert
             $point['AddTime']=date("Y-m-d H:i:s");
             $point['LastUpdateTime']=date("Y-m-d H:i:s");
