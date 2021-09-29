@@ -29,7 +29,8 @@ class PointEdit extends React.Component{
             },
             fileContent:"",
             localFilePath:'',
-            editFile:false
+            editFile:false,
+            fileChanged:false
         }
         this.getPointDetail=this.getPointDetail.bind(this);
         this.handleChange=this.handleChange.bind(this);
@@ -60,7 +61,7 @@ class PointEdit extends React.Component{
             method:"post",
             body:JSON.stringify({
                 point:this.state.point,
-                FileContent:this.state.fileContent
+                FileContent:this.state.fileChanged?this.state.fileContent:''
             })
         }).then((res)=>{
             res.json().then((json)=>{
@@ -236,6 +237,7 @@ class PointEdit extends React.Component{
                                     value={this.state.fileContent}
                                     onChange={(value)=>{
                                         this.setState({
+                                            fileChanged:true,
                                             fileContent:value
                                         })
                                     }}

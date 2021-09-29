@@ -167,27 +167,16 @@ class Points extends Base{
         if ($today){
             return self::returnActionResult([],false,"今天已经领取过积分了");
         }
-        // 检查昨天是否也领取过积分
-        $sql=sprintf(
-            "select * from %s where keyword='%s'",
-            Points::$table,
-            self::getKeywordName(date("Y-m-d",strtotime("-1")))
-        );
-        $yesterday=$this->pdo->getFirstRow($sql);
-        $point=10;
-        if ($yesterday){
-            $point+=$yesterday['Point'];
-        }
         $this->post=json_encode([
             'point'=>[
                 'keyword'=>$todayKey,
                 'status'=>self::STATUS_ARCHIVED,
-                'Point'=>$point
+                'Point'=>10
             ]
         ]);
         $this->Save(false);
         return self::returnActionResult([
-            'Point'=>$point
+            'Point'=>10
         ]);
     }
 
