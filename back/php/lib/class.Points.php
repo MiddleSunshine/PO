@@ -86,6 +86,7 @@ class Points extends Base{
         if (!empty($point['ID'])){
             // update
             $point['LastUpdateTime']=date("Y-m-d H:i:s");
+            array_map("trim",$point);
             $this->handleSql($point,$point['ID'],'keyword');
         }else{
             unset($point['ID']);
@@ -100,6 +101,8 @@ class Points extends Base{
             $point['AddTime']=date("Y-m-d H:i:s");
             $point['LastUpdateTime']=date("Y-m-d H:i:s");
             empty($point['status']) && $point['status']=self::STATUS_NEW;
+            array_map("trim",$point);
+            $this->post['keyword']=$point['keyword'];
             $this->handleSql($point,0,'keyword');
         }
         $sql=sprintf("select ID,status from %s where keyword='%s'",static::$table,$point['keyword']);
