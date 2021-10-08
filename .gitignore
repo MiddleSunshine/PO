@@ -1,7 +1,7 @@
 
-src/node_modules/
+www/node_modules/
 
-src/package-lock.json
+www/package-lock.json
 
 back/data/mysql/
 
@@ -13,11 +13,11 @@ back/php/.idea/
 
 back/php/debug/
 
-src/src/page/debug.js
+www/src/page/debug.js
 
 back/php/md/
 
-src/build/
+www/build/
 
 back/php/debug.php
 
